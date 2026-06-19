@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Receitas — Tricô & Crochê</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --bg2: #f5f5f4;
+      --bg3: #eeede9;
+      --text: #1a1a18;
+      --text2: #6b6b67;
+      --text3: #9b9b96;
+      --border: rgba(0,0,0,0.12);
+      --border2: rgba(0,0,0,0.22);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --warning-bg: #faeeda;
+      --warning-border: #ef9f27;
+      --warning-text: #633806;
+      --danger-bg: #fcebeb;
+      --danger-border: #e24b4a;
+      --danger-text: #a32d2d;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1c1c1a;
+        --bg2: #252523;
+        --bg3: #2e2e2b;
+        --text: #f0efeb;
+        --text2: #a8a8a3;
+        --text3: #6b6b67;
+        --border: rgba(255,255,255,0.1);
+        --border2: rgba(255,255,255,0.2);
+        --warning-bg: #412402;
+        --warning-border: #854f0b;
+        --warning-text: #fac775;
+        --danger-bg: #501313;
+        --danger-border: #a32d2d;
+        --danger-text: #f09595;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg3);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 4rem;
+    }
+
+    h1.app-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 1.5rem;
+      border-bottom: 0.5px solid var(--border);
+      overflow-x: auto;
+    }
+    .tab {
+      background: none;
+      border: none;
+      padding: 8px 14px;
+      font-size: 13px;
+      color: var(--text2);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -0.5px;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .tab.active { color: var(--text); font-weight: 500; border-bottom: 2px solid var(--text); }
+    .tab:hover { color: var(--text); }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* Cards */
+    .card {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 12px;
+    }
+
+    /* Form */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-full { grid-column: 1 / -1; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 13px; color: var(--text2); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 0.5px solid var(--border2);
+      border-radius: var(--radius-md);
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--text2);
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .field-hint { font-size: 11px; color: var(--text3); margin-top: 3px; line-height: 1.5; }
+    .field-hint code { font-size: 10px; background: var(--bg2); padding: 1px 4px; border-radius: 4px; }
+
+    @media (max-width: 500px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-full { grid-column: 1; }
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-ghost {
+      background: none;
+      border: 0.5px solid var(--border2);
+      color: var(--text2);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+    .btn-ghost:hover { background: var(--bg2); color: var(--text); }
+
+    .btn-danger-sm {
+      background: #a32d2d;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+
+    .btn-icon {
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-icon:hover { background: var(--bg3); }
+    .btn-icon:active { transform: scale(0.93); }
+
+    /* Badges */
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .badge-progress { background: #faeeda; color: #854f0b; }
+    .badge-done    { background: #eaf3de; color: #3b6d11; }
+    .badge-planned { background: #e6f1fb; color: #185fa5; }
+
+    /* Project card */
+    .project-card {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 12px;
+    }
+    .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 12px; }
+    .project-name { font-size: 16px; font-weight: 500; }
+    .project-type { font-size: 12px; color: var(--text2); margin-top: 3px; }
+
+    .project-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--text2); margin-bottom: 10px; }
+    .meta-item { display: inline-flex; align-items: center; gap: 4px; }
+
+    .duration-badge {
+      font-size: 12px;
+      color: var(--text2);
+      background: var(--bg2);
+      padding: 3px 8px;
+      border-radius: var(--radius-md);
+    }
+
+    /* Thumb */
+    .thumb-wrap {
+      width: 56px; height: 56px; flex-shrink: 0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumb-broken { font-size: 10px; color: var(--text3); text-align: center; padding: 4px; line-height: 1.4; }
+
+    .actions {
+      display: flex; gap: 8px; margin-top: 12px;
+      padding-top: 12px;
+      border-top: 0.5px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    /* Recipe block */
+    .recipe-block {
+      font-size: 13px; color: var(--text2);
+      line-height: 1.7; white-space: pre-wrap; word-break: break-word;
+      padding: 10px 12px;
+      background: var(--bg2);
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--border);
+      margin-top: 10px;
+    }
+
+    /* Progress tracker */
+    .progress-tracker {
+      border-radius: var(--radius-md);
+      padding: 14px; margin-top: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .progress-title {
+      font-size: 11px; font-weight: 500; color: var(--text2);
+      margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .counter-block { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .counter-label { font-size: 13px; color: var(--text2); width: 80px; flex-shrink: 0; }
+    .counter-val {
+      font-size: 22px; font-weight: 500; min-width: 44px;
+      text-align: center; color: var(--text);
+      transition: color 0.15s;
+    }
+    .counter-val.flash-num { color: #d4537e; }
+    .counter-sub { font-size: 12px; color: var(--text2); }
+
+    .auto-toggle { display: flex; align-items: flex-start; gap: 8px; margin-top: 6px; padding-top: 10px; border-top: 0.5px solid var(--border); }
+    .auto-label { font-size: 12px; color: var(--text2); cursor: pointer; line-height: 1.4; padding-top: 1px; }
+    input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; margin-top: 1px; }
+
+    /* Inline confirms */
+    .inline-confirm {
+      display: none; align-items: center; gap: 8px;
+      background: var(--warning-bg);
+      border: 0.5px solid var(--warning-border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      font-size: 13px; color: var(--warning-text);
+      flex-wrap: wrap; margin-top: 12px;
+    }
+    .inline-confirm.visible { display: flex; }
+    .inline-confirm span { flex: 1; min-width: 180px; font-weight: 500; }
+
+    .delete-confirm { display: none; margin-top: 8px; padding: 10px 12px; background: var(--danger-bg); border: 0.5px solid var(--danger-border); border-radius: var(--radius-md); }
+    .delete-confirm.visible { display: block; }
+    .delete-confirm p { font-size: 13px; color: var(--danger-text); margin-bottom: 8px; }
+    .delete-confirm-btns { display: flex; gap: 8px; }
+
+    /* Recipe collapsible */
+    .recipe-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 12px; }
+    .recipe-meta-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .pill { background: var(--bg2); border-radius: 20px; padding: 3px 10px; font-size: 12px; color: var(--text2); }
+    .recipe-collapsible { position: relative; overflow: hidden; }
+    .recipe-collapsible.collapsed { max-height: 88px; }
+    .recipe-collapsible.collapsed::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 36px;
+      background: linear-gradient(transparent, var(--bg2)); pointer-events: none;
+    }
+    .expand-btn { background: none; border: none; color: var(--text2); font-size: 12px; cursor: pointer; padding: 6px 0 0; text-decoration: underline; display: block; font-family: inherit; }
+
+    /* Filter bar */
+    .filter-bar { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; flex-wrap: wrap; }
+    .filter-bar .search-input { flex: 0 0 72%; min-width: 180px; }
+    .filter-bar .type-select { flex: 1 1 auto; min-width: 110px; }
+    .filter-bar input, .filter-bar select {
+      padding: 8px 10px; font-size: 14px;
+      border: 0.5px solid var(--border2);
+      border-radius: var(--radius-md);
+      background: var(--bg); color: var(--text);
+      font-family: inherit;
+    }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--bg2); border-radius: var(--radius-md); padding: 1rem; text-align: center; }
+    .stat-value { font-size: 24px; font-weight: 500; }
+    .stat-label { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+    /* Empty state */
+    .empty { text-align: center; padding: 3rem 1rem; color: var(--text2); font-size: 14px; }
+    .empty i { font-size: 32px; display: block; margin-bottom: 12px; opacity: 0.4; }
+
+    /* Form header */
+    .form-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+    .form-header h2 { font-size: 16px; font-weight: 500; margin: 0; }
+
+    h2.section-title { font-size: 16px; font-weight: 500; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="app-title">🧶 Minhas Receitas</h1>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('projetos')">Projetos</button>
+    <button class="tab" onclick="showTab('novo')">Novo projeto</button>
+    <button class="tab" onclick="showTab('receitas')">Receitas</button>
+    <button class="tab" onclick="showTab('historico')">Histórico</button>
+  </div>
+
+  <!-- PROJETOS -->
+  <div id="tab-projetos" class="section active">
+    <div class="filter-bar">
+      <select id="filter-status" class="type-select" onchange="renderProjects()">
+        <option value="">Todos os status</option>
+        <option value="em andamento">Em andamento</option>
+        <option value="concluído">Concluído</option>
+        <option value="planejado">Planejado</option>
+      </select>
+      <select id="filter-type" class="type-select" onchange="renderProjects()">
+        <option value="">Todos os tipos</option>
+        <option value="Tricô">Tricô</option>
+        <option value="Crochê">Crochê</option>
+      </select>
+    </div>
+    <div id="projects-list"></div>
+  </div>
+
+  <!-- NOVO / EDITAR PROJETO -->
+  <div id="tab-novo" class="section">
+    <div class="card">
+      <div class="form-header">
+        <button class="btn-ghost" onclick="goBack()" style="padding:6px 10px;">
+          <i class="ti ti-arrow-left"></i> Voltar
+        </button>
+        <h2 id="form-title">Adicionar projeto</h2>
+      </div>
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Nome do projeto</label>
+          <input type="text" id="f-name" placeholder="Ex: Suéter azul inverno">
+        </div>
+        <div class="form-group">
+          <label>Tipo</label>
+          <select id="f-type" onchange="updateNeedleOptions()">
+            <option value="Tricô">Tricô</option>
+            <option value="Crochê">Crochê</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="f-status">
+            <option value="planejado">Planejado</option>
+            <option value="em andamento">Em andamento</option>
+            <option value="concluído">Concluído</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tipo de fio</label>
+          <input type="text" id="f-yarn-type" placeholder="Ex: Lã merino, algodão 4/6">
+        </div>
+        <div class="form-group">
+          <label>Cor do fio</label>
+          <input type="text" id="f-yarn-color" placeholder="Ex: Azul marinho">
+        </div>
+        <div class="form-group">
+          <label id="needle-label">Agulha</label>
+          <select id="f-needle"></select>
+        </div>
+        <div class="form-group">
+          <label>Carreiras por repetição</label>
+          <input type="number" id="f-rows-per-rep" min="0" placeholder="Ex: 6 (deixe vazio se não usar)">
+        </div>
+        <div class="form-group">
+          <label>Data de início</label>
+          <input type="date" id="f-start">
+        </div>
+        <div class="form-group form-full">
+          <label>Receita / instruções</label>
+          <textarea id="f-recipe" placeholder="Cole ou escreva a receita aqui..." rows="6"></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label>URL da foto</label>
+          <input type="text" id="f-photo" placeholder="Ex: https://res.cloudinary.com/…/foto.jpg">
+          <span class="field-hint">
+            <strong>Cloudinary</strong> (cloudinary.com, plano gratuito) — recomendado.<br>
+            <strong>Google Drive</strong> — compartilhe como "qualquer pessoa com o link" e use:<br>
+            <code>https://drive.google.com/uc?export=view&id=ID_DO_ARQUIVO</code>
+          </span>
+        </div>
+      </div>
+
+      <div id="clear-confirm-box" class="inline-confirm">
+        <span>Deseja mesmo limpar o formulário?</span>
+        <button class="btn-ghost" onclick="doClean()">Sim, limpar</button>
+        <button class="btn-ghost" onclick="hideClearConfirm()">Cancelar</button>
+      </div>
+
+      <div style="margin-top:1rem; display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn-primary" onclick="saveProject()">
+          <i class="ti ti-device-floppy"></i> Salvar projeto
+        </button>
+        <button class="btn-ghost" onclick="showClearConfirm()">
+          <i class="ti ti-eraser"></i> Limpar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECEITAS -->
+  <div id="tab-receitas" class="section">
+    <div class="filter-bar">
+      <input type="text" class="search-input" id="recipe-search" placeholder="Buscar por nome, fio, agulha, receita…" oninput="renderRecipes()">
+      <select id="recipe-filter-type" class="type-select" onchange="renderRecipes()">
+        <option value="">Todos os tipos</option>
+        <option value="Tricô">Tricô</option>
+        <option value="Crochê">Crochê</option>
+      </select>
+    </div>
+    <div id="recipes-list"></div>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div id="tab-historico" class="section">
+    <div class="stats-grid" id="stats-grid"></div>
+    <h2 class="section-title">Projetos concluídos</h2>
+    <div id="history-list"></div>
+  </div>
+</div>
+
+<script>
+const NEEDLE_OPTIONS = {
+  'Tricô':  ['Selecione','2.0mm','2.5mm','3.0mm','3.5mm','4.0mm','4.5mm','5.0mm','5.5mm','6.0mm','6.5mm','7.0mm','8.0mm','9.0mm','10.0mm','12.0mm','15.0mm','Circular 3.5mm','Circular 4.0mm','Circular 4.5mm','Circular 5.0mm','Circular 6.0mm','Ponta dupla 2.5mm','Ponta dupla 3.0mm','Ponta dupla 3.5mm'],
+  'Crochê': ['Selecione','1.5mm','2.0mm','2.5mm','3.0mm','3.5mm','4.0mm','4.5mm','5.0mm','5.5mm','6.0mm','6.5mm','7.0mm','8.0mm','9.0mm','10.0mm','12.0mm','15.0mm']
+};
+
+let projects = [];
+let editingId = null;
+let prevTab = 'projetos';
+let pendingDeleteId = null;
+const expandedSet = new Set();
+
+// ── Storage (localStorage) ──
+function loadProjects() {
+  try {
+    const raw = localStorage.getItem('trico_projetos');
+    projects = raw ? JSON.parse(raw) : [];
+  } catch(e) { projects = []; }
+  renderAll();
+}
+
+function persist() {
+  try { localStorage.setItem('trico_projetos', JSON.stringify(projects)); } catch(e) {}
+}
+
+// ── Helpers ──
+function today() { return new Date().toISOString().split('T')[0]; }
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function escHTML(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getBadge(s) {
+  if (s==='em andamento') return '<span class="badge badge-progress">Em andamento</span>';
+  if (s==='concluído')    return '<span class="badge badge-done">Concluído</span>';
+  return '<span class="badge badge-planned">Planejado</span>';
+}
+
+function getDuration(start, end) {
+  if (!start) return '';
+  const days = Math.round((new Date(end||Date.now()) - new Date(start)) / 86400000);
+  if (days < 1)  return 'hoje';
+  if (days < 7)  return days + 'd';
+  if (days < 30) return Math.round(days/7) + ' sem';
+  return Math.round(days/30) + ' meses';
+}
+
+function thumbHTML(photo) {
+  if (!photo) return '';
+  const url = escHTML(photo);
+  return `<a href="${url}" target="_blank" rel="noopener" style="text-decoration:none;flex-shrink:0;" title="Ver imagem maior">
+    <div class="thumb-wrap">
+      <img src="${url}" alt="foto" onerror="this.parentElement.innerHTML='<span class=thumb-broken>link<br>inválido</span>'">
+    </div>
+  </a>`;
+}
+
+function getP(id) { return projects.find(x => x.id === id); }
+function renderAll() { renderProjects(); renderRecipes(); renderHistory(); }
+
+// ── Navegação ──
+function showTab(name) {
+  const names = ['projetos','novo','receitas','historico'];
+  const active = names.find((_,i) => document.querySelectorAll('.tab')[i].classList.contains('active'));
+  if (active && active !== name) prevTab = active;
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i]===name));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  hideClearConfirm();
+  if (name==='projetos') renderProjects();
+  if (name==='receitas') renderRecipes();
+  if (name==='historico') renderHistory();
+}
+
+function goBack() {
+  const safe = ['projetos','receitas','historico'].includes(prevTab) ? prevTab : 'projetos';
+  showTab(safe);
+}
+
+// ── Agulha/gancho ──
+function updateNeedleOptions(keepVal) {
+  const type = document.getElementById('f-type').value;
+  const sel = document.getElementById('f-needle');
+  document.getElementById('needle-label').textContent = type === 'Crochê' ? 'Gancho' : 'Agulha';
+  sel.innerHTML = (NEEDLE_OPTIONS[type]||[])
+    .map(o => `<option value="${o==='Selecione'?'':o}">${o}</option>`).join('');
+  if (keepVal) sel.value = keepVal;
+}
+
+// ── Confirmações inline ──
+function showClearConfirm() { document.getElementById('clear-confirm-box').classList.add('visible'); }
+function hideClearConfirm() { document.getElementById('clear-confirm-box').classList.remove('visible'); }
+function doClean() { hideClearConfirm(); clearForm(); }
+
+function deleteProject(id) {
+  if (pendingDeleteId && pendingDeleteId !== id) {
+    const prev = document.getElementById('del-confirm-' + pendingDeleteId);
+    if (prev) prev.classList.remove('visible');
+  }
+  pendingDeleteId = id;
+  const box = document.getElementById('del-confirm-' + id);
+  if (box) box.classList.toggle('visible');
+}
+function cancelDelete(id) {
+  const box = document.getElementById('del-confirm-' + id);
+  if (box) box.classList.remove('visible');
+  pendingDeleteId = null;
+}
+function confirmDelete(id) {
+  projects = projects.filter(p => p.id !== id);
+  pendingDeleteId = null;
+  persist(); renderProjects();
+}
+
+// ── Flash repetição ──
+function doFlash(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.classList.remove('flash-num');
+  void el.offsetWidth;
+  el.classList.add('flash-num');
+  setTimeout(() => { const e = document.getElementById(elId); if (e) e.classList.remove('flash-num'); }, 1200);
+}
+
+// ── Progresso ──
+function adjustRow(id, delta) {
+  const p = getP(id); if (!p) return;
+  const rpr = parseInt(p.rowsPerRep) || 0;
+  const auto = p.autoRep !== false;
+  let row = (p.rowInRep || 0) + delta;
+  if (row < 0) row = 0;
+  if (auto && rpr > 0 && row >= rpr) {
+    p.rep = (p.rep || 0) + 1;
+    p.rowInRep = 0;
+    persist(); renderProjects();
+    doFlash('rep-val-' + id);
+  } else {
+    p.rowInRep = rpr > 0 ? Math.min(row, rpr) : row;
+    persist(); renderProjects();
+  }
+}
+
+function adjustRep(id, delta) {
+  const p = getP(id); if (!p) return;
+  p.rep = Math.max(0, (p.rep || 0) + delta);
+  p.rowInRep = 0;
+  persist(); renderProjects();
+}
+
+function setAuto(id, val) {
+  const p = getP(id); if (!p) return;
+  p.autoRep = val;
+  persist(); renderProjects();
+}
+
+// ── Render Projetos ──
+function renderProjects() {
+  const statusF = document.getElementById('filter-status').value;
+  const typeF   = document.getElementById('filter-type').value;
+  const list    = document.getElementById('projects-list');
+  const filtered = projects.filter(p =>
+    (!statusF || p.status === statusF) && (!typeF || p.type === typeF)
+  );
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty"><i class="ti ti-yarn"></i>Nenhum projeto ainda.<br>Clique em "Novo projeto" para começar.</div>';
+    return;
+  }
+  list.innerHTML = filtered.map(p => {
+    const rpr  = parseInt(p.rowsPerRep) || 0;
+    const row  = p.rowInRep || 0;
+    const rep  = p.rep || 0;
+    const auto = p.autoRep !== false;
+
+    const metaItems = [];
+    if (p.yarnType)  metaItems.push(`<span class="meta-item">🧶 ${escHTML(p.yarnType)}</span>`);
+    if (p.yarnColor) metaItems.push(`<span class="meta-item">🎨 ${escHTML(p.yarnColor)}</span>`);
+    if (p.needle)    metaItems.push(`<span class="meta-item">🪡 ${escHTML(p.needle)}</span>`);
+    if (p.startDate) metaItems.push(`<span class="meta-item">📅 ${fmtDate(p.startDate)}</span>`);
+
+    const progressHTML = p.status === 'em andamento' ? `
+      <div class="progress-tracker">
+        <div class="progress-title">Progresso</div>
+        <div class="counter-block">
+          <span class="counter-label">Carreira</span>
+          <button class="btn-icon" onclick="adjustRow('${p.id}',-1)" aria-label="diminuir">−</button>
+          <span class="counter-val" id="row-val-${p.id}">${row}</span>
+          <button class="btn-icon" onclick="adjustRow('${p.id}',1)" aria-label="aumentar">+</button>
+          ${rpr > 0 ? `<span class="counter-sub">de ${rpr} na rep.</span>` : ''}
+        </div>
+        ${rpr > 0 ? `
+        <div class="counter-block">
+          <span class="counter-label">Repetição</span>
+          <button class="btn-icon" onclick="adjustRep('${p.id}',-1)" aria-label="diminuir rep">−</button>
+          <span class="counter-val" id="rep-val-${p.id}">${rep}</span>
+          <button class="btn-icon" onclick="adjustRep('${p.id}',1)" aria-label="aumentar rep">+</button>
+        </div>
+        <div class="auto-toggle">
+          <input type="checkbox" id="auto-${p.id}" ${auto ? 'checked' : ''}
+            onchange="setAuto('${p.id}', this.checked)">
+          <label class="auto-label" for="auto-${p.id}">
+            Avanço automático — a cada ${rpr} carreiras, conta uma repetição e zera a carreira
+          </label>
+        </div>` : ''}
+      </div>` : '';
+
+    return `<div class="project-card">
+      <div class="project-header">
+        <div style="flex:1;min-width:0;">
+          <div class="project-name">${escHTML(p.name)}</div>
+          <div class="project-type">${escHTML(p.type)}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end;">
+          ${getBadge(p.status)}
+          ${p.startDate ? `<span class="duration-badge">${getDuration(p.startDate, p.endDate)}</span>` : ''}
+          ${thumbHTML(p.photo)}
+        </div>
+      </div>
+      <div class="project-meta">${metaItems.join('')}</div>
+      ${progressHTML}
+      ${p.recipe ? `<div class="recipe-block">${escHTML(p.recipe)}</div>` : ''}
+      <div class="actions">
+        <button class="btn-ghost" onclick="editProject('${p.id}')"><i class="ti ti-edit"></i> Editar</button>
+        ${p.status !== 'concluído' ? `<button class="btn-ghost" onclick="markDone('${p.id}')"><i class="ti ti-check"></i> Concluir</button>` : ''}
+        <button class="btn-ghost" style="color:#a32d2d;border-color:#e24b4a;" onclick="deleteProject('${p.id}')"><i class="ti ti-trash"></i> Excluir</button>
+      </div>
+      <div class="delete-confirm ${pendingDeleteId===p.id?'visible':''}" id="del-confirm-${p.id}">
+        <p>Tem certeza? Esta ação não pode ser desfeita.</p>
+        <div class="delete-confirm-btns">
+          <button class="btn-danger-sm" onclick="confirmDelete('${p.id}')"><i class="ti ti-trash"></i> Sim, excluir</button>
+          <button class="btn-ghost" onclick="cancelDelete('${p.id}')">Cancelar</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Render Receitas ──
+const COLLAPSE_H = 88;
+
+function hlText(text, query) {
+  if (!query || !text) return escHTML(text || '');
+  const lower = text.toLowerCase();
+  const idx = lower.indexOf(query);
+  if (idx === -1) return escHTML(text);
+  return escHTML(text.slice(0,idx))
+    + '<mark style="background:#4b1528;color:#f4c0d1;border-radius:2px;padding:0 2px;">'
+    + escHTML(text.slice(idx, idx+query.length))
+    + '</mark>'
+    + escHTML(text.slice(idx+query.length));
+}
+
+function renderRecipes() {
+  const typeF = document.getElementById('recipe-filter-type').value;
+  const query = (document.getElementById('recipe-search').value||'').toLowerCase().trim();
+  const list  = document.getElementById('recipes-list');
+  const items = projects.filter(p => {
+    if (!p.recipe || !p.recipe.trim()) return false;
+    if (typeF && p.type !== typeF) return false;
+    if (query) {
+      const h = [p.name,p.yarnType,p.yarnColor,p.needle,p.recipe].join(' ').toLowerCase();
+      if (!h.includes(query)) return false;
+    }
+    return true;
+  });
+  if (!items.length) {
+    list.innerHTML = query
+      ? '<div class="empty"><i class="ti ti-search"></i>Nenhuma receita encontrada.</div>'
+      : '<div class="empty"><i class="ti ti-book"></i>Nenhuma receita salva ainda.</div>';
+    return;
+  }
+  list.innerHTML = items.map(p => {
+    const isExp = expandedSet.has(p.id);
+    const chips = [
+      p.needle     ? escHTML(p.needle) : null,
+      p.yarnType   ? escHTML(p.yarnType) : null,
+      p.yarnColor  ? escHTML(p.yarnColor) : null,
+      p.rowsPerRep > 0 ? `${p.rowsPerRep} carr/rep` : null
+    ].filter(Boolean).map(c => `<span class="pill">${c}</span>`).join('');
+
+    return `<div class="recipe-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:12px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:15px;font-weight:500;">${hlText(p.name,query)}</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px;">${escHTML(p.type)} · ${getBadge(p.status)}</div>
+        </div>
+        ${thumbHTML(p.photo)}
+      </div>
+      <div class="recipe-meta-pills">${chips}</div>
+      <div class="recipe-block recipe-collapsible ${isExp?'':'collapsed'}" id="rcp-${p.id}">${escHTML(p.recipe)}</div>
+      <div id="rcp-btn-wrap-${p.id}"></div>
+      <div style="margin-top:10px;">
+        <button class="btn-ghost" onclick="useRecipe('${p.id}')"><i class="ti ti-copy"></i> Usar como base para novo projeto</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  requestAnimationFrame(() => {
+    items.forEach(p => {
+      const block   = document.getElementById('rcp-' + p.id);
+      const btnWrap = document.getElementById('rcp-btn-wrap-' + p.id);
+      if (!block || !btnWrap) return;
+      block.classList.remove('collapsed');
+      const fullH = block.scrollHeight;
+      if (!expandedSet.has(p.id)) block.classList.add('collapsed');
+      if (fullH > COLLAPSE_H) {
+        const isExp = expandedSet.has(p.id);
+        btnWrap.innerHTML = `<button class="expand-btn" onclick="toggleRecipe('${p.id}')">${isExp?'Ver menos ↑':'Ver completa ↓'}</button>`;
+      }
+    });
+  });
+}
+
+function toggleRecipe(id) {
+  const block   = document.getElementById('rcp-' + id);
+  const btnWrap = document.getElementById('rcp-btn-wrap-' + id);
+  if (!block || !btnWrap) return;
+  if (expandedSet.has(id)) {
+    expandedSet.delete(id);
+    block.classList.add('collapsed');
+    btnWrap.querySelector('button').textContent = 'Ver completa ↓';
+  } else {
+    expandedSet.add(id);
+    block.classList.remove('collapsed');
+    btnWrap.querySelector('button').textContent = 'Ver menos ↑';
+  }
+}
+
+function useRecipe(id) {
+  const p = getP(id); if (!p) return;
+  document.getElementById('f-name').value         = p.name + ' (cópia)';
+  document.getElementById('f-type').value         = p.type;
+  updateNeedleOptions(p.needle);
+  document.getElementById('f-yarn-type').value    = p.yarnType  || '';
+  document.getElementById('f-yarn-color').value   = p.yarnColor || '';
+  document.getElementById('f-rows-per-rep').value = p.rowsPerRep || '';
+  document.getElementById('f-recipe').value       = p.recipe    || '';
+  document.getElementById('f-status').value       = 'planejado';
+  document.getElementById('f-start').value        = today();
+  document.getElementById('f-photo').value        = '';
+  document.getElementById('form-title').textContent = 'Novo projeto (baseado em receita)';
+  editingId = null; showTab('novo');
+}
+
+// ── Render Histórico ──
+function renderHistory() {
+  const done   = projects.filter(p => p.status === 'concluído');
+  const inProg = projects.filter(p => p.status === 'em andamento');
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-value">${projects.length}</div><div class="stat-label">Total</div></div>
+    <div class="stat-card"><div class="stat-value">${done.length}</div><div class="stat-label">Concluídos</div></div>
+    <div class="stat-card"><div class="stat-value">${inProg.length}</div><div class="stat-label">Em andamento</div></div>`;
+  const list = document.getElementById('history-list');
+  if (!done.length) {
+    list.innerHTML = '<div class="empty"><i class="ti ti-trophy"></i>Nenhum projeto concluído ainda.</div>';
+    return;
+  }
+  list.innerHTML = done.map(p => {
+    const rpr   = parseInt(p.rowsPerRep) || 0;
+    const total = ((p.rep||0) * rpr) + (p.rowInRep||0);
+    return `<div class="project-card">
+      <div class="project-header">
+        <div style="flex:1;min-width:0;">
+          <div class="project-name">${escHTML(p.name)}</div>
+          <div class="project-type">${escHTML(p.type)}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          ${getBadge(p.status)}
+          ${p.startDate ? `<span class="duration-badge">${getDuration(p.startDate,p.endDate)}</span>` : ''}
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text2);">
+        ${p.startDate ? '📅 Início: '+fmtDate(p.startDate) : ''}
+        ${p.endDate   ? '· Conclusão: '+fmtDate(p.endDate) : ''}
+      </div>
+      ${total > 0 ? `<div style="font-size:12px;color:var(--text2);margin-top:4px;">${total} carreiras · ${p.rep||0} repetições</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ── CRUD ──
+function saveProject() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { alert('Dê um nome ao projeto.'); return; }
+  const proj = {
+    id:         editingId || Date.now().toString(),
+    name,
+    type:       document.getElementById('f-type').value,
+    status:     document.getElementById('f-status').value,
+    yarnType:   document.getElementById('f-yarn-type').value,
+    yarnColor:  document.getElementById('f-yarn-color').value,
+    needle:     document.getElementById('f-needle').value,
+    rowsPerRep: parseInt(document.getElementById('f-rows-per-rep').value) || 0,
+    startDate:  document.getElementById('f-start').value,
+    recipe:     document.getElementById('f-recipe').value,
+    photo:      document.getElementById('f-photo').value.trim(),
+    rowInRep: 0, rep: 0, autoRep: true
+  };
+  if (editingId) {
+    const idx = projects.findIndex(p => p.id === editingId);
+    proj.rowInRep = projects[idx].rowInRep || 0;
+    proj.rep      = projects[idx].rep      || 0;
+    proj.autoRep  = projects[idx].autoRep  !== false;
+    proj.endDate  = projects[idx].endDate;
+    projects[idx] = proj;
+    editingId = null;
+  } else {
+    projects.unshift(proj);
+  }
+  persist(); clearForm(); showTab('projetos');
+}
+
+function clearForm() {
+  ['f-name','f-yarn-type','f-yarn-color','f-recipe','f-photo']
+    .forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-rows-per-rep').value = '';
+  document.getElementById('f-type').value   = 'Tricô';
+  document.getElementById('f-status').value = 'planejado';
+  document.getElementById('f-start').value  = today();
+  document.getElementById('form-title').textContent = 'Adicionar projeto';
+  updateNeedleOptions();
+  editingId = null;
+}
+
+function editProject(id) {
+  const p = getP(id); if (!p) return;
+  editingId = id;
+  document.getElementById('f-name').value         = p.name      || '';
+  document.getElementById('f-type').value         = p.type      || 'Tricô';
+  updateNeedleOptions(p.needle);
+  document.getElementById('f-status').value       = p.status    || 'planejado';
+  document.getElementById('f-yarn-type').value    = p.yarnType  || '';
+  document.getElementById('f-yarn-color').value   = p.yarnColor || '';
+  document.getElementById('f-rows-per-rep').value = p.rowsPerRep || '';
+  document.getElementById('f-start').value        = p.startDate || today();
+  document.getElementById('f-recipe').value       = p.recipe    || '';
+  document.getElementById('f-photo').value        = p.photo     || '';
+  document.getElementById('form-title').textContent = 'Editar projeto';
+  showTab('novo');
+}
+
+function markDone(id) {
+  const p = getP(id); if (!p) return;
+  p.status  = 'concluído';
+  p.endDate = today();
+  persist(); renderProjects();
+}
+
+// ── Init ──
+updateNeedleOptions();
+document.getElementById('f-start').value = today();
+loadProjects();
+</script>
+</body>
+</html>
