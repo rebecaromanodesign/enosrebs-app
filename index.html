@@ -9,362 +9,189 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #ffffff;
-      --bg2: #f5f5f4;
-      --bg3: #eeede9;
-      --text: #1a1a18;
-      --text2: #6b6b67;
-      --text3: #9b9b96;
-      --border: rgba(0,0,0,0.12);
-      --border2: rgba(0,0,0,0.22);
-      --radius-md: 8px;
-      --radius-lg: 12px;
-      --pink: #d4537e;
-      --pink-bg: #fbeaf0;
-      --pink-bg2: #f4c0d1;
-      --pink-dark: #72243e;
-      --pink-border: #ed93b1;
-      --warning-bg: #faeeda;
-      --warning-border: #ef9f27;
-      --warning-text: #633806;
-      --danger-bg: #fcebeb;
-      --danger-border: #e24b4a;
-      --danger-text: #a32d2d;
+      --bg: #ffffff; --bg2: #f5f5f4; --bg3: #eeede9;
+      --text: #1a1a18; --text2: #6b6b67; --text3: #9b9b96;
+      --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+      --radius-md: 8px; --radius-lg: 12px;
+      --pink: #d4537e; --pink-bg: #fbeaf0; --pink-bg2: #f4c0d1;
+      --pink-dark: #72243e; --pink-border: #ed93b1;
+      --warning-bg: #faeeda; --warning-border: #ef9f27; --warning-text: #633806;
+      --danger-bg: #fcebeb; --danger-border: #e24b4a; --danger-text: #a32d2d;
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #1c1c1a;
-        --bg2: #252523;
-        --bg3: #2e2e2b;
-        --text: #f0efeb;
-        --text2: #a8a8a3;
-        --text3: #6b6b67;
-        --border: rgba(255,255,255,0.1);
-        --border2: rgba(255,255,255,0.2);
-        --pink: #ed93b1;
-        --pink-bg: #4b1528;
-        --pink-bg2: #72243e;
-        --pink-dark: #f4c0d1;
-        --pink-border: #993556;
-        --warning-bg: #412402;
-        --warning-border: #854f0b;
-        --warning-text: #fac775;
-        --danger-bg: #501313;
-        --danger-border: #a32d2d;
-        --danger-text: #f09595;
+        --bg: #1c1c1a; --bg2: #252523; --bg3: #2e2e2b;
+        --text: #f0efeb; --text2: #a8a8a3; --text3: #6b6b67;
+        --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.2);
+        --pink: #ed93b1; --pink-bg: #4b1528; --pink-bg2: #72243e;
+        --pink-dark: #f4c0d1; --pink-border: #993556;
+        --warning-bg: #412402; --warning-border: #854f0b; --warning-text: #fac775;
+        --danger-bg: #501313; --danger-border: #a32d2d; --danger-text: #f09595;
       }
     }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg3);
-      color: var(--text);
-      min-height: 100vh;
-      font-size: 16px;
-      line-height: 1.5;
-    }
-
-    .container {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 1.5rem 1rem 4rem;
-    }
-
-    h1.app-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      color: var(--text);
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; font-size: 16px; line-height: 1.5; }
+    .container { max-width: 720px; margin: 0 auto; padding: 1.25rem 1rem 5rem; }
+    h1.app-title { font-size: 18px; font-weight: 600; margin-bottom: 1.25rem; color: var(--text); }
+    @media (max-width: 480px) { h1.app-title { font-size: 16px; } }
 
     /* Tabs */
-    .tabs {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 1.5rem;
-      border-bottom: 0.5px solid var(--border);
-      overflow-x: auto;
-    }
-    .tab {
-      background: none;
-      border: none;
-      padding: 8px 14px;
-      font-size: 13px;
-      color: var(--text2);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -0.5px;
-      white-space: nowrap;
-      font-family: inherit;
-    }
-    .tab.active { color: var(--pink); font-weight: 500; border-bottom: 2px solid var(--pink); }
-    .tab:hover { color: var(--text); }
-
+    .tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab { background: none; border: none; padding: 10px 14px; font-size: 13px; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; font-family: inherit; flex-shrink: 0; }
+    .tab.active { color: var(--pink); font-weight: 600; border-bottom: 2px solid var(--pink); }
     .section { display: none; }
     .section.active { display: block; }
 
     /* Cards */
-    .card {
-      background: var(--bg);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem;
-      margin-bottom: 12px;
-    }
+    .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 12px; }
 
     /* Form */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .form-full { grid-column: 1 / -1; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
     .form-group label { font-size: 13px; color: var(--text2); }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 8px 10px;
-      font-size: 14px;
-      border: 0.5px solid var(--border2);
-      border-radius: var(--radius-md);
-      background: var(--bg);
-      color: var(--text);
-      font-family: inherit;
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 9px 36px 9px 10px; font-size: 14px;
+      border: 0.5px solid var(--border2); border-radius: var(--radius-md);
+      background: var(--bg); color: var(--text); font-family: inherit;
+      background-repeat: no-repeat; background-position: right 11px center;
     }
-    /* Espaço para ícone em selects e number dentro do form */
-    .form-group select,
-    .form-group input[type="number"] {
-      padding-right: 36px;
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--text2);
-    }
-    .form-group textarea { resize: vertical; min-height: 100px; }
-    .field-hint { font-size: 11px; color: var(--text3); margin-top: 3px; line-height: 1.5; }
-    .field-hint code { font-size: 10px; background: var(--bg2); padding: 1px 4px; border-radius: 4px; }
-
-    @media (max-width: 500px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .form-full { grid-column: 1; }
-    }
-
-    /* Buttons */
-    .btn-primary {
-      background: var(--text);
-      color: var(--bg);
-      border: none;
-      padding: 10px 20px;
-      border-radius: var(--radius-md);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: inherit;
-    }
-    .btn-primary:hover { opacity: 0.85; }
-
-    .btn-ghost {
-      background: none;
-      border: 0.5px solid var(--border2);
-      color: var(--text2);
-      padding: 8px 16px;
-      border-radius: var(--radius-md);
-      font-size: 13px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: inherit;
-    }
-    .btn-ghost:hover { background: var(--bg2); color: var(--text); }
-
-    .btn-danger-sm {
-      background: #a32d2d;
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: var(--radius-md);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: inherit;
-    }
-
-    .btn-icon {
-      background: var(--bg2);
-      border: 0.5px solid var(--border);
-      color: var(--text);
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-md);
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .btn-icon:hover { background: var(--bg3); }
-    .btn-icon:active { transform: scale(0.93); }
-
-    /* Badges — cores originais por status */
-    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
-    .badge-progress { background: #faeeda; color: #854f0b; }
-    .badge-done    { background: #eaf3de; color: #3b6d11; }
-    .badge-planned { background: #e6f1fb; color: #185fa5; }
-
-    /* Ícone customizado — aplicado diretamente nas tags para evitar conflito */
-    select,
-    input[type="number"] {
-      padding-right: 36px !important;
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-    }
-    select {
-      appearance: none;
-      -webkit-appearance: none;
+    .form-group textarea { padding-right: 10px; resize: vertical; min-height: 100px; }
+    .form-group input[type="text"], .form-group input[type="date"] { padding-right: 10px; }
+    .form-group select {
+      appearance: none; -webkit-appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b67' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
     }
-    input[type="number"] {
+    .form-group input[type="number"] {
       -moz-appearance: textfield;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='16' viewBox='0 0 24 32' fill='none' stroke='%236b6b67' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 10 12 4 18 10'/%3E%3Cpolyline points='6 22 12 28 18 22'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='16' viewBox='0 0 22 32' fill='none' stroke='%236b6b67' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='4 10 11 4 18 10'/%3E%3Cpolyline points='4 22 11 28 18 22'/%3E%3C/svg%3E");
     }
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
+    .form-group input[type="number"]::-webkit-inner-spin-button,
+    .form-group input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--pink); }
+    .field-hint { font-size: 11px; color: var(--text3); margin-top: 2px; line-height: 1.5; }
+    @media (max-width: 500px) { .form-grid { grid-template-columns: 1fr; } .form-full { grid-column: 1; } }
+
+    /* Buttons */
+    .btn-primary { background: var(--text); color: var(--bg); border: none; padding: 10px 18px; border-radius: var(--radius-md); font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-family: inherit; }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-ghost { background: none; border: 0.5px solid var(--border2); color: var(--text2); padding: 8px 14px; border-radius: var(--radius-md); font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-family: inherit; }
+    .btn-ghost:hover { background: var(--bg2); color: var(--text); }
+    .btn-danger-sm { background: #a32d2d; color: #fff; border: none; padding: 8px 14px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-family: inherit; }
+    .btn-icon { background: var(--bg2); border: 0.5px solid var(--border); color: var(--text); width: 40px; height: 40px; border-radius: var(--radius-md); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .btn-icon:hover { background: var(--bg3); }
+    .btn-icon:active { transform: scale(0.93); }
+    .btn-add-block { background: var(--pink-bg); border: 0.5px solid var(--pink-border); color: var(--pink-dark); padding: 7px 20px; border-radius: var(--radius-md); font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-weight: 500; white-space: nowrap; }
+    .btn-add-block:hover { background: var(--pink-bg2); }
+
+    /* Badges */
+    .badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+    .badge-progress { background: #faeeda; color: #854f0b; }
+    .badge-done     { background: #eaf3de; color: #3b6d11; }
+    .badge-planned  { background: #e6f1fb; color: #185fa5; }
 
     /* Project card */
-    .project-card {
-      background: var(--bg);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem;
-      margin-bottom: 12px;
-    }
-    .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 12px; }
-    .project-name { font-size: 16px; font-weight: 500; color: var(--pink); }
-    .project-type { font-size: 12px; color: var(--text2); margin-top: 3px; }
-
-    .project-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--text2); margin-bottom: 10px; }
+    .project-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 12px; }
+    .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 10px; }
+    .project-name { font-size: 16px; font-weight: 600; color: var(--pink); }
+    .project-type { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .project-meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--text2); margin-bottom: 10px; }
     .meta-item { display: inline-flex; align-items: center; gap: 4px; }
+    .duration-badge { font-size: 12px; color: var(--text2); background: var(--bg2); padding: 3px 8px; border-radius: var(--radius-md); white-space: nowrap; }
 
-    .duration-badge {
-      font-size: 12px;
-      color: var(--text2);
-      background: var(--bg2);
-      padding: 3px 8px;
-      border-radius: var(--radius-md);
-    }
-
-    .actions {
-      display: flex; gap: 8px; margin-top: 12px;
-      padding-top: 12px;
-      border-top: 0.5px solid var(--border);
-      flex-wrap: wrap;
-    }
+    .actions { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); flex-wrap: wrap; }
 
     /* Recipe block */
-    .recipe-block {
-      font-size: 13px; color: var(--text2);
-      line-height: 1.7; white-space: pre-wrap; word-break: break-word;
-      padding: 10px 12px;
-      background: var(--bg2);
-      border-radius: var(--radius-md);
-      border: 0.5px solid var(--border);
-      margin-top: 10px;
-    }
+    .recipe-block { font-size: 13px; color: var(--text2); line-height: 1.7; white-space: pre-wrap; word-break: break-word; padding: 10px 12px; background: var(--bg2); border-radius: var(--radius-md); border: 0.5px solid var(--border); margin-top: 10px; }
 
-    /* Progress tracker */
-    .progress-tracker {
-      border-radius: var(--radius-md);
-      padding: 14px; margin-top: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg2);
-    }
-    .progress-title {
-      font-size: 11px; font-weight: 500; color: var(--text2);
-      margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em;
-    }
-    .counter-block { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .counter-label { font-size: 13px; color: var(--text2); width: 80px; flex-shrink: 0; }
-    .counter-val {
-      font-size: 22px; font-weight: 500; min-width: 44px;
-      text-align: center; color: var(--text);
-      transition: color 0.15s;
-    }
+    /* Progress tracker — multi-bloco */
+    .progress-tracker { border-radius: var(--radius-md); padding: 14px; margin-top: 8px; border: 1px solid var(--border); background: var(--bg2); }
+    .progress-tracker-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .progress-title { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    .block-list { display: flex; flex-direction: column; gap: 10px; }
+    .prog-block { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; }
+    .prog-block.active-block { border-color: var(--pink-border); background: var(--pink-bg); }
+    .prog-block.done-block { opacity: 0.55; }
+    .prog-block-name { font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .prog-block-name span.block-done-label { font-size: 11px; color: var(--pink); font-weight: 500; }
+    .prog-block-name span.block-locked-label { font-size: 11px; color: var(--text3); font-weight: 400; }
+
+    .counter-block { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+    .counter-label { font-size: 13px; color: var(--text2); width: 76px; flex-shrink: 0; }
+    .counter-val { font-size: 22px; font-weight: 600; min-width: 40px; text-align: center; color: var(--text); transition: color 0.15s; }
     .counter-val.flash-num { color: var(--pink); }
     .counter-sub { font-size: 12px; color: var(--text2); }
+    .counter-total { font-size: 11px; color: var(--text3); margin-left: 2px; }
 
-    .auto-toggle { display: flex; align-items: flex-start; gap: 8px; margin-top: 6px; padding-top: 10px; border-top: 0.5px solid var(--border); }
+    .auto-toggle { display: flex; align-items: flex-start; gap: 7px; margin-top: 6px; padding-top: 8px; border-top: 0.5px solid var(--border); }
     .auto-label { font-size: 12px; color: var(--text2); cursor: pointer; line-height: 1.4; padding-top: 1px; }
-    input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; margin-top: 1px; }
+    input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; margin-top: 1px; accent-color: var(--pink); }
+
+    /* Celebration overlay */
+    .celebration { display: none; position: absolute; inset: 0; border-radius: var(--radius-md); background: var(--pink-bg); border: 1px solid var(--pink-border); align-items: center; justify-content: center; flex-direction: column; gap: 6px; text-align: center; padding: 1rem; z-index: 2; }
+    .celebration.show { display: flex; }
+    .celebration-emoji { font-size: 36px; animation: pop 0.4s ease; }
+    .celebration-text { font-size: 14px; font-weight: 600; color: var(--pink-dark); }
+    .celebration-sub { font-size: 12px; color: var(--pink); }
+    @keyframes pop { 0%{transform:scale(0.5)} 70%{transform:scale(1.2)} 100%{transform:scale(1)} }
+    .progress-tracker { position: relative; }
 
     /* Inline confirms */
-    .inline-confirm {
-      display: none; align-items: center; gap: 8px;
-      background: var(--warning-bg);
-      border: 0.5px solid var(--warning-border);
-      border-radius: var(--radius-md);
-      padding: 10px 12px;
-      font-size: 13px; color: var(--warning-text);
-      flex-wrap: wrap; margin-top: 12px;
-    }
+    .inline-confirm { display: none; align-items: center; gap: 8px; background: var(--warning-bg); border: 0.5px solid var(--warning-border); border-radius: var(--radius-md); padding: 10px 12px; font-size: 13px; color: var(--warning-text); flex-wrap: wrap; margin-top: 12px; }
     .inline-confirm.visible { display: flex; }
-    .inline-confirm span { flex: 1; min-width: 180px; font-weight: 500; }
-
+    .inline-confirm span { flex: 1; min-width: 160px; font-weight: 500; }
     .delete-confirm { display: none; margin-top: 8px; padding: 10px 12px; background: var(--danger-bg); border: 0.5px solid var(--danger-border); border-radius: var(--radius-md); }
     .delete-confirm.visible { display: block; }
     .delete-confirm p { font-size: 13px; color: var(--danger-text); margin-bottom: 8px; }
-    .delete-confirm-btns { display: flex; gap: 8px; }
+    .delete-confirm-btns { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    /* Recipe collapsible */
+    /* Recipe */
     .recipe-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 12px; }
     .recipe-meta-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
     .pill { background: var(--bg2); border-radius: 20px; padding: 3px 10px; font-size: 12px; color: var(--text2); }
     .recipe-collapsible { position: relative; overflow: hidden; }
     .recipe-collapsible.collapsed { max-height: 88px; }
-    .recipe-collapsible.collapsed::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 36px;
-      background: linear-gradient(transparent, var(--bg2)); pointer-events: none;
-    }
+    .recipe-collapsible.collapsed::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 36px; background: linear-gradient(transparent, var(--bg2)); pointer-events: none; }
     .expand-btn { background: none; border: none; color: var(--text2); font-size: 12px; cursor: pointer; padding: 6px 0 0; text-decoration: underline; display: block; font-family: inherit; }
 
     /* Filter bar */
     .filter-bar { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; flex-wrap: wrap; }
-    .filter-bar .search-input { flex: 0 0 72%; min-width: 180px; }
-    .filter-bar .type-select { flex: 1 1 auto; min-width: 110px; }
+    .filter-bar .search-input { flex: 1 1 60%; min-width: 140px; }
+    .filter-bar .type-select { flex: 1 1 120px; min-width: 100px; }
     .filter-bar input, .filter-bar select {
-      padding: 8px 10px; font-size: 14px;
-      border: 0.5px solid var(--border2);
-      border-radius: var(--radius-md);
-      background: var(--bg); color: var(--text);
-      font-family: inherit;
+      padding: 9px 36px 9px 10px; font-size: 14px; border: 0.5px solid var(--border2);
+      border-radius: var(--radius-md); background: var(--bg); color: var(--text); font-family: inherit;
+      background-repeat: no-repeat; background-position: right 11px center;
     }
+    .filter-bar input { padding-right: 10px; }
+    .filter-bar select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b67' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); }
 
     /* Stats */
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
     .stat-card { background: var(--bg2); border-radius: var(--radius-md); padding: 1rem; text-align: center; }
-    .stat-value { font-size: 24px; font-weight: 500; }
+    .stat-value { font-size: 24px; font-weight: 600; color: var(--pink); }
     .stat-label { font-size: 12px; color: var(--text2); margin-top: 4px; }
 
-    /* Empty state */
     .empty { text-align: center; padding: 3rem 1rem; color: var(--text2); font-size: 14px; }
     .empty i { font-size: 32px; display: block; margin-bottom: 12px; opacity: 0.4; }
-
-    /* Form header */
+    h2.section-title { font-size: 16px; font-weight: 500; margin-bottom: 1rem; }
     .form-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
     .form-header h2 { font-size: 16px; font-weight: 500; margin: 0; }
 
-    h2.section-title { font-size: 16px; font-weight: 500; margin-bottom: 1rem; }
+    /* Blocos de progresso no formulário */
+    .blocks-container { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .block-form-row { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; position: relative; }
+    .block-form-row .block-form-grid { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; align-items: end; }
+    @media (max-width: 500px) { .block-form-row .block-form-grid { grid-template-columns: 1fr 1fr; } .block-form-row .block-form-grid .btn-remove-block { grid-column: 1 / -1; justify-self: start; } }
+    .block-form-row .form-group label { font-size: 12px; }
+    .block-form-row .form-group input { font-size: 13px; padding: 7px 10px; }
+    .block-form-row .form-group input[type="number"] { padding-right: 36px; }
+    .btn-remove-block { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; padding: 4px; line-height: 1; }
+    .btn-remove-block:hover { color: var(--danger-text); }
+    .blocks-add-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .blocks-hint { font-size: 11px; color: var(--text3); }
   </style>
 </head>
 <body>
@@ -438,20 +265,30 @@
           <select id="f-needle"></select>
         </div>
         <div class="form-group">
-          <label>Carreiras por repetição</label>
-          <input type="number" id="f-rows-per-rep" min="0" placeholder="Ex: 6 (deixe vazio se não usar)">
-        </div>
-        <div class="form-group">
           <label>Data de início</label>
           <input type="date" id="f-start">
         </div>
         <div class="form-group form-full">
           <label>Receita / instruções</label>
-          <textarea id="f-recipe" placeholder="Cole ou escreva a receita aqui..." rows="6"></textarea>
+          <textarea id="f-recipe" placeholder="Cole ou escreva a receita aqui..." rows="5"></textarea>
+        </div>
+
+        <!-- Blocos de progresso -->
+        <div class="form-group form-full" style="margin-top: 4px;">
+          <label>Blocos de progresso</label>
+          <div class="blocks-container" id="f-blocks-container"></div>
+          <div class="blocks-add-row">
+            <button type="button" class="btn-add-block" onclick="addFormBlock()">
+              <i class="ti ti-plus"></i> Adicionar bloco
+            </button>
+            <span class="blocks-hint">Cada bloco tem nome, carreiras/rep e total de repetições.</span>
+          </div>
         </div>
       </div>
 
-      <div id="clear-confirm-box" class="inline-confirm">
+      <hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0 0;">
+
+      <div id="clear-confirm-box" class="inline-confirm" style="margin-top:1rem;">
         <span>Deseja mesmo limpar o formulário?</span>
         <button class="btn-ghost" onclick="doClean()">Sim, limpar</button>
         <button class="btn-ghost" onclick="hideClearConfirm()">Cancelar</button>
@@ -500,207 +337,271 @@ let editingId = null;
 let prevTab = 'projetos';
 let pendingDeleteId = null;
 const expandedSet = new Set();
+// Blocos no formulário (array temporário)
+let formBlocks = [];
 
-// ── Storage (localStorage) ──
+// ── Storage ──
 function loadProjects() {
-  try {
-    const raw = localStorage.getItem('trico_projetos');
-    projects = raw ? JSON.parse(raw) : [];
-  } catch(e) { projects = []; }
+  try { const r = localStorage.getItem('trico_projetos'); projects = r ? JSON.parse(r) : []; }
+  catch(e) { projects = []; }
+  // Migrar projetos antigos (sem blocks) para o novo formato
+  projects.forEach(p => {
+    if (!p.blocks) {
+      const rpr = parseInt(p.rowsPerRep) || 0;
+      p.blocks = rpr > 0
+        ? [{ id: p.id+'_b0', name: 'Progresso', rowsPerRep: rpr, totalReps: 0, rowInRep: p.rowInRep||0, rep: p.rep||0, autoRep: p.autoRep!==false }]
+        : [];
+    }
+  });
   renderAll();
 }
-
-function persist() {
-  try { localStorage.setItem('trico_projetos', JSON.stringify(projects)); } catch(e) {}
-}
+function persist() { try { localStorage.setItem('trico_projetos', JSON.stringify(projects)); } catch(e) {} }
 
 // ── Helpers ──
 function today() { return new Date().toISOString().split('T')[0]; }
-
-function fmtDate(iso) {
-  if (!iso) return '';
-  const [y, m, d] = iso.split('-');
-  return `${d}/${m}/${y}`;
-}
-
-function escHTML(str) {
-  return String(str)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
+function fmtDate(iso) { if (!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
+function escHTML(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function getBadge(s) {
   if (s==='em andamento') return '<span class="badge badge-progress">Em andamento</span>';
   if (s==='concluído')    return '<span class="badge badge-done">Concluído</span>';
   return '<span class="badge badge-planned">Planejado</span>';
 }
-
 function getDuration(start, end) {
   if (!start) return '';
-  const days = Math.round((new Date(end||Date.now()) - new Date(start)) / 86400000);
-  if (days < 1)  return 'hoje';
-  if (days < 7)  return days + 'd';
-  if (days < 30) return Math.round(days/7) + ' sem';
-  return Math.round(days/30) + ' meses';
+  const days = Math.round((new Date(end||Date.now())-new Date(start))/86400000);
+  if (days<1) return 'hoje'; if (days<7) return days+'d'; if (days<30) return Math.round(days/7)+' sem';
+  return Math.round(days/30)+' meses';
 }
-
-function getP(id) { return projects.find(x => x.id === id); }
+function getP(id) { return projects.find(x=>x.id===id); }
 function renderAll() { renderProjects(); renderRecipes(); renderHistory(); }
+function allBlocksDone(p) {
+  if (!p.blocks || !p.blocks.length) return false;
+  return p.blocks.every(b => b.totalReps > 0 && b.rep >= b.totalReps);
+}
 
 // ── Navegação ──
 function showTab(name) {
   const names = ['projetos','novo','receitas','historico'];
-  const active = names.find((_,i) => document.querySelectorAll('.tab')[i].classList.contains('active'));
-  if (active && active !== name) prevTab = active;
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i]===name));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const active = names.find((_,i)=>document.querySelectorAll('.tab')[i].classList.contains('active'));
+  if (active && active!==name) prevTab = active;
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   hideClearConfirm();
   if (name==='projetos') renderProjects();
   if (name==='receitas') renderRecipes();
   if (name==='historico') renderHistory();
+  if (name==='novo') renderFormBlocks();
 }
+function goBack() { showTab(['projetos','receitas','historico'].includes(prevTab)?prevTab:'projetos'); }
 
-function goBack() {
-  const safe = ['projetos','receitas','historico'].includes(prevTab) ? prevTab : 'projetos';
-  showTab(safe);
-}
-
-// ── Agulha/gancho ──
+// ── Agulha ──
 function updateNeedleOptions(keepVal) {
   const type = document.getElementById('f-type').value;
   const sel = document.getElementById('f-needle');
-  document.getElementById('needle-label').textContent = type === 'Crochê' ? 'Gancho' : 'Agulha';
-  sel.innerHTML = (NEEDLE_OPTIONS[type]||[])
-    .map(o => `<option value="${o==='Selecione'?'':o}">${o}</option>`).join('');
-  if (keepVal) sel.value = keepVal;
+  document.getElementById('needle-label').textContent = type==='Crochê'?'Gancho':'Agulha';
+  sel.innerHTML=(NEEDLE_OPTIONS[type]||[]).map(o=>`<option value="${o==='Selecione'?'':o}">${o}</option>`).join('');
+  if (keepVal) sel.value=keepVal;
 }
 
-// ── Confirmações inline ──
+// ── Confirmações ──
 function showClearConfirm() { document.getElementById('clear-confirm-box').classList.add('visible'); }
 function hideClearConfirm() { document.getElementById('clear-confirm-box').classList.remove('visible'); }
 function doClean() { hideClearConfirm(); clearForm(); }
 
 function deleteProject(id) {
-  if (pendingDeleteId && pendingDeleteId !== id) {
-    const prev = document.getElementById('del-confirm-' + pendingDeleteId);
-    if (prev) prev.classList.remove('visible');
-  }
-  pendingDeleteId = id;
-  const box = document.getElementById('del-confirm-' + id);
+  if (pendingDeleteId && pendingDeleteId!==id) { const e=document.getElementById('del-confirm-'+pendingDeleteId); if(e) e.classList.remove('visible'); }
+  pendingDeleteId=id;
+  const box=document.getElementById('del-confirm-'+id);
   if (box) box.classList.toggle('visible');
 }
-function cancelDelete(id) {
-  const box = document.getElementById('del-confirm-' + id);
-  if (box) box.classList.remove('visible');
-  pendingDeleteId = null;
-}
-function confirmDelete(id) {
-  projects = projects.filter(p => p.id !== id);
-  pendingDeleteId = null;
-  persist(); renderProjects();
+function cancelDelete(id) { const b=document.getElementById('del-confirm-'+id); if(b) b.classList.remove('visible'); pendingDeleteId=null; }
+function confirmDelete(id) { projects=projects.filter(p=>p.id!==id); pendingDeleteId=null; persist(); renderProjects(); }
+
+// ── Blocos de progresso — formulário ──
+function renderFormBlocks() {
+  const c = document.getElementById('f-blocks-container');
+  if (!c) return;
+  c.innerHTML = formBlocks.map((b, i) => `
+    <div class="block-form-row">
+      <div class="block-form-grid">
+        <div class="form-group">
+          <label>Nome do bloco</label>
+          <input type="text" value="${escHTML(b.name)}" placeholder="Ex: Ponto arroz"
+            oninput="formBlocks[${i}].name=this.value">
+        </div>
+        <div class="form-group">
+          <label>Carr./rep.</label>
+          <input type="number" min="1" value="${b.rowsPerRep||''}" placeholder="Ex: 6"
+            oninput="formBlocks[${i}].rowsPerRep=parseInt(this.value)||0">
+        </div>
+        <div class="form-group">
+          <label>Total reps</label>
+          <input type="number" min="1" value="${b.totalReps||''}" placeholder="Ex: 10"
+            oninput="formBlocks[${i}].totalReps=parseInt(this.value)||0">
+        </div>
+        <button type="button" class="btn-remove-block" onclick="removeFormBlock(${i})" title="Remover bloco"
+          style="${formBlocks.length <= 1 ? 'visibility:hidden;pointer-events:none;' : ''}">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+    </div>`).join('');
 }
 
-// ── Flash repetição ──
+function addFormBlock() {
+  formBlocks.push({ id: Date.now().toString(), name: `Bloco ${formBlocks.length+1}`, rowsPerRep: 0, totalReps: 0, rowInRep: 0, rep: 0, autoRep: true });
+  renderFormBlocks();
+}
+
+function removeFormBlock(i) {
+  if (formBlocks.length <= 1) { alert('O projeto precisa ter ao menos um bloco de progresso.'); return; }
+  formBlocks.splice(i, 1);
+  renderFormBlocks();
+}
+
+// ── Flash ──
 function doFlash(elId) {
-  const el = document.getElementById(elId);
-  if (!el) return;
-  el.classList.remove('flash-num');
-  void el.offsetWidth;
-  el.classList.add('flash-num');
-  setTimeout(() => { const e = document.getElementById(elId); if (e) e.classList.remove('flash-num'); }, 1200);
+  const el=document.getElementById(elId); if (!el) return;
+  el.classList.remove('flash-num'); void el.offsetWidth; el.classList.add('flash-num');
+  setTimeout(()=>{ const e=document.getElementById(elId); if(e) e.classList.remove('flash-num'); },1200);
 }
 
-// ── Progresso ──
-function adjustRow(id, delta) {
-  const p = getP(id); if (!p) return;
-  const rpr = parseInt(p.rowsPerRep) || 0;
-  const auto = p.autoRep !== false;
-  let row = (p.rowInRep || 0) + delta;
-  if (row < 0) row = 0;
-  if (auto && rpr > 0 && row >= rpr) {
-    p.rep = (p.rep || 0) + 1;
-    p.rowInRep = 0;
+// ── Progresso — contadores ──
+function adjustRow(pid, bi, delta) {
+  const p=getP(pid); if (!p||!p.blocks[bi]) return;
+  const b=p.blocks[bi];
+  const rpr=parseInt(b.rowsPerRep)||0;
+  let row=(b.rowInRep||0)+delta;
+  if (row<0) row=0;
+  if (b.autoRep!==false && rpr>0 && row>=rpr) {
+    b.rep=(b.rep||0)+1; b.rowInRep=0;
     persist(); renderProjects();
-    doFlash('rep-val-' + id);
+    doFlash(`rep-val-${pid}-${bi}`);
+    if (b.totalReps>0 && b.rep>=b.totalReps) {
+      setTimeout(()=>checkCelebration(pid),300);
+    }
   } else {
-    p.rowInRep = rpr > 0 ? Math.min(row, rpr) : row;
+    b.rowInRep=rpr>0?Math.min(row,rpr):row;
     persist(); renderProjects();
   }
 }
 
-function adjustRep(id, delta) {
-  const p = getP(id); if (!p) return;
-  p.rep = Math.max(0, (p.rep || 0) + delta);
-  p.rowInRep = 0;
+function adjustRep(pid, bi, delta) {
+  const p=getP(pid); if (!p||!p.blocks[bi]) return;
+  const b=p.blocks[bi];
+  b.rep=Math.max(0,(b.rep||0)+delta); b.rowInRep=0;
   persist(); renderProjects();
 }
 
-function setAuto(id, val) {
-  const p = getP(id); if (!p) return;
-  p.autoRep = val;
-  persist(); renderProjects();
+function setAuto(pid, bi, val) {
+  const p=getP(pid); if (!p||!p.blocks[bi]) return;
+  p.blocks[bi].autoRep=val; persist(); renderProjects();
+}
+
+function checkCelebration(pid) {
+  const p=getP(pid); if (!p) return;
+  if (allBlocksDone(p)) {
+    const el=document.getElementById('celebration-'+pid);
+    if (el) el.classList.add('show');
+  }
+}
+
+function dismissCelebration(pid) {
+  const el=document.getElementById('celebration-'+pid);
+  if (el) el.classList.remove('show');
 }
 
 // ── Render Projetos ──
 function renderProjects() {
-  const statusF = document.getElementById('filter-status').value;
-  const typeF   = document.getElementById('filter-type').value;
-  const list    = document.getElementById('projects-list');
-  const filtered = projects.filter(p =>
-    (!statusF || p.status === statusF) && (!typeF || p.type === typeF)
-  );
-
-  // Ordenação: em andamento (por startDate) → planejado (por startDate) → concluído (por endDate)
-  const statusOrder = { 'em andamento': 0, 'planejado': 1, 'concluído': 2 };
-  filtered.sort((a, b) => {
-    const so = statusOrder[a.status] - statusOrder[b.status];
-    if (so !== 0) return so;
-    const dateA = a.status === 'concluído' ? (a.endDate || '') : (a.startDate || '');
-    const dateB = b.status === 'concluído' ? (b.endDate || '') : (b.startDate || '');
-    return dateA.localeCompare(dateB);
+  const statusF=document.getElementById('filter-status').value;
+  const typeF=document.getElementById('filter-type').value;
+  const list=document.getElementById('projects-list');
+  const filtered=projects.filter(p=>(!statusF||p.status===statusF)&&(!typeF||p.type===typeF));
+  const ord={'em andamento':0,'planejado':1,'concluído':2};
+  filtered.sort((a,b)=>{
+    const so=ord[a.status]-ord[b.status]; if(so!==0) return so;
+    const da=a.status==='concluído'?(a.endDate||''):(a.startDate||'');
+    const db=b.status==='concluído'?(b.endDate||''):(b.startDate||'');
+    return da.localeCompare(db);
   });
-  if (!filtered.length) {
-    list.innerHTML = '<div class="empty"><i class="ti ti-yarn"></i>Nenhum projeto ainda.<br>Clique em "Novo projeto" para começar.</div>';
-    return;
-  }
-  list.innerHTML = filtered.map(p => {
-    const rpr  = parseInt(p.rowsPerRep) || 0;
-    const row  = p.rowInRep || 0;
-    const rep  = p.rep || 0;
-    const auto = p.autoRep !== false;
+  if (!filtered.length) { list.innerHTML='<div class="empty"><i class="ti ti-yarn"></i>Nenhum projeto ainda.<br>Clique em "Novo projeto" para começar.</div>'; return; }
 
-    const metaItems = [];
-    if (p.yarnType)  metaItems.push(`<span class="meta-item">🧶 ${escHTML(p.yarnType)}</span>`);
-    if (p.yarnColor) metaItems.push(`<span class="meta-item">🎨 ${escHTML(p.yarnColor)}</span>`);
-    if (p.needle)    metaItems.push(`<span class="meta-item">🪡 ${escHTML(p.needle)}</span>`);
-    if (p.startDate) metaItems.push(`<span class="meta-item">📅 ${fmtDate(p.startDate)}</span>`);
+  list.innerHTML=filtered.map(p=>{
+    const meta=[];
+    if (p.yarnType)  meta.push(`<span class="meta-item">🧶 ${escHTML(p.yarnType)}</span>`);
+    if (p.yarnColor) meta.push(`<span class="meta-item">🎨 ${escHTML(p.yarnColor)}</span>`);
+    if (p.needle)    meta.push(`<span class="meta-item">🪡 ${escHTML(p.needle)}</span>`);
+    if (p.startDate) meta.push(`<span class="meta-item">📅 ${fmtDate(p.startDate)}</span>`);
 
-    const progressHTML = p.status === 'em andamento' ? `
-      <div class="progress-tracker">
-        <div class="progress-title">Progresso</div>
-        <div class="counter-block">
-          <span class="counter-label">Carreira</span>
-          <button class="btn-icon" onclick="adjustRow('${p.id}',-1)" aria-label="diminuir">−</button>
-          <span class="counter-val" id="row-val-${p.id}">${row}</span>
-          <button class="btn-icon" onclick="adjustRow('${p.id}',1)" aria-label="aumentar">+</button>
-          ${rpr > 0 ? `<span class="counter-sub">de ${rpr} na rep.</span>` : ''}
+    let progressHTML = '';
+    if (p.status==='em andamento' && p.blocks && p.blocks.length) {
+      const celebrated=allBlocksDone(p);
+      // find current active block index (first not done)
+      let activeIdx = p.blocks.findIndex(b=> b.totalReps<=0 || b.rep<b.totalReps);
+      if (activeIdx===-1) activeIdx=p.blocks.length-1; // all done
+
+      const blocksHTML = p.blocks.map((b,bi)=>{
+        const isActive = bi===activeIdx;
+        const isDone = b.totalReps>0 && b.rep>=b.totalReps;
+        const isLocked = bi>activeIdx;
+        const rpr=parseInt(b.rowsPerRep)||0;
+        const row=b.rowInRep||0; const rep=b.rep||0;
+        const blockClass = isDone?'prog-block done-block': isActive?'prog-block active-block':'prog-block';
+        const nameLabel = isDone
+          ? `<span class="block-done-label">✓ concluído</span>`
+          : isLocked ? `<span class="block-locked-label">aguardando bloco anterior</span>` : '';
+
+        if (isLocked) {
+          return `<div class="${blockClass}">
+            <div class="prog-block-name">${escHTML(b.name)||'Bloco '+(bi+1)} ${nameLabel}</div>
+          </div>`;
+        }
+
+        return `<div class="${blockClass}">
+          <div class="prog-block-name">${escHTML(b.name)||'Bloco '+(bi+1)} ${nameLabel}</div>
+          <div class="counter-block">
+            <span class="counter-label">Carreira</span>
+            <button class="btn-icon" onclick="adjustRow('${p.id}',${bi},-1)">−</button>
+            <span class="counter-val" id="row-val-${p.id}-${bi}">${row}</span>
+            <button class="btn-icon" onclick="adjustRow('${p.id}',${bi},1)">+</button>
+            ${rpr>0?`<span class="counter-sub">de ${rpr}</span>`:''}
+          </div>
+          ${rpr>0?`
+          <div class="counter-block">
+            <span class="counter-label">Repetição</span>
+            <button class="btn-icon" onclick="adjustRep('${p.id}',${bi},-1)">−</button>
+            <span class="counter-val" id="rep-val-${p.id}-${bi}">${rep}</span>
+            <button class="btn-icon" onclick="adjustRep('${p.id}',${bi},1)">+</button>
+            ${b.totalReps>0?`<span class="counter-total">/ ${b.totalReps}</span>`:''}
+          </div>
+          <div class="auto-toggle">
+            <input type="checkbox" id="auto-${p.id}-${bi}" ${b.autoRep!==false?'checked':''}
+              onchange="setAuto('${p.id}',${bi},this.checked)">
+            <label class="auto-label" for="auto-${p.id}-${bi}">
+              Avanço automático — a cada ${rpr} carreiras, conta uma repetição
+            </label>
+          </div>`:''}
+        </div>`;
+      }).join('');
+
+      progressHTML=`<div class="progress-tracker">
+        <div class="progress-tracker-header">
+          <span class="progress-title">Progresso</span>
         </div>
-        ${rpr > 0 ? `
-        <div class="counter-block">
-          <span class="counter-label">Repetição</span>
-          <button class="btn-icon" onclick="adjustRep('${p.id}',-1)" aria-label="diminuir rep">−</button>
-          <span class="counter-val" id="rep-val-${p.id}">${rep}</span>
-          <button class="btn-icon" onclick="adjustRep('${p.id}',1)" aria-label="aumentar rep">+</button>
+        <div class="block-list">${blocksHTML}</div>
+        <div class="celebration ${celebrated?'show':''}" id="celebration-${p.id}">
+          <div class="celebration-emoji">🎉</div>
+          <div class="celebration-text">Todos os blocos concluídos!</div>
+          <div class="celebration-sub">Que projeto incrível, Rebs! 🧶</div>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center;">
+            <button class="btn-primary" style="font-size:13px;padding:8px 14px;" onclick="dismissCelebration('${p.id}');markDone('${p.id}')">
+              <i class="ti ti-check"></i> Concluir projeto
+            </button>
+            <button class="btn-ghost" style="font-size:12px;" onclick="dismissCelebration('${p.id}')">Agora não</button>
+          </div>
         </div>
-        <div class="auto-toggle">
-          <input type="checkbox" id="auto-${p.id}" ${auto ? 'checked' : ''}
-            onchange="setAuto('${p.id}', this.checked)">
-          <label class="auto-label" for="auto-${p.id}">
-            Avanço automático — a cada ${rpr} carreiras, conta uma repetição e zera a carreira
-          </label>
-        </div>` : ''}
-      </div>` : '';
+      </div>`;
+    }
 
     return `<div class="project-card">
       <div class="project-header">
@@ -708,17 +609,17 @@ function renderProjects() {
           <div class="project-name">${escHTML(p.name)}</div>
           <div class="project-type">${escHTML(p.type)}</div>
         </div>
-        <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end;">
+        <div style="display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end;">
           ${getBadge(p.status)}
-          ${p.startDate ? `<span class="duration-badge">${getDuration(p.startDate, p.endDate)}</span>` : ''}
+          ${p.startDate?`<span class="duration-badge">${getDuration(p.startDate,p.endDate)}</span>`:''}
         </div>
       </div>
-      <div class="project-meta">${metaItems.join('')}</div>
+      <div class="project-meta">${meta.join('')}</div>
       ${progressHTML}
-      ${p.recipe ? `<div class="recipe-block">${escHTML(p.recipe)}</div>` : ''}
+      ${p.recipe?`<div class="recipe-block">${escHTML(p.recipe)}</div>`:''}
       <div class="actions">
         <button class="btn-ghost" onclick="editProject('${p.id}')"><i class="ti ti-edit"></i> Editar</button>
-        ${p.status !== 'concluído' ? `<button class="btn-ghost" onclick="markDone('${p.id}')"><i class="ti ti-check"></i> Concluir</button>` : ''}
+        ${p.status!=='concluído'?`<button class="btn-ghost" onclick="markDone('${p.id}')"><i class="ti ti-check"></i> Concluir</button>`:''}
         <button class="btn-ghost" style="color:#a32d2d;border-color:#e24b4a;" onclick="deleteProject('${p.id}')"><i class="ti ti-trash"></i> Excluir</button>
       </div>
       <div class="delete-confirm ${pendingDeleteId===p.id?'visible':''}" id="del-confirm-${p.id}">
@@ -733,48 +634,30 @@ function renderProjects() {
 }
 
 // ── Render Receitas ──
-const COLLAPSE_H = 88;
-
-function hlText(text, query) {
-  if (!query || !text) return escHTML(text || '');
-  const lower = text.toLowerCase();
-  const idx = lower.indexOf(query);
-  if (idx === -1) return escHTML(text);
-  return escHTML(text.slice(0,idx))
-    + '<mark style="background:#fbeaf0;color:#72243e;border-radius:2px;padding:0 2px;">'
-    + escHTML(text.slice(idx, idx+query.length))
-    + '</mark>'
-    + escHTML(text.slice(idx+query.length));
+const COLLAPSE_H=88;
+function hlText(text,query) {
+  if (!query||!text) return escHTML(text||'');
+  const lower=text.toLowerCase(); const idx=lower.indexOf(query); if(idx===-1) return escHTML(text);
+  return escHTML(text.slice(0,idx))+'<mark style="background:#fbeaf0;color:#72243e;border-radius:2px;padding:0 2px;">'+escHTML(text.slice(idx,idx+query.length))+'</mark>'+escHTML(text.slice(idx+query.length));
 }
 
 function renderRecipes() {
-  const typeF = document.getElementById('recipe-filter-type').value;
-  const query = (document.getElementById('recipe-search').value||'').toLowerCase().trim();
-  const list  = document.getElementById('recipes-list');
-  const items = projects.filter(p => {
-    if (!p.recipe || !p.recipe.trim()) return false;
-    if (typeF && p.type !== typeF) return false;
-    if (query) {
-      const h = [p.name,p.yarnType,p.yarnColor,p.needle,p.recipe].join(' ').toLowerCase();
-      if (!h.includes(query)) return false;
-    }
+  const typeF=document.getElementById('recipe-filter-type').value;
+  const query=(document.getElementById('recipe-search').value||'').toLowerCase().trim();
+  const list=document.getElementById('recipes-list');
+  const items=projects.filter(p=>{
+    if (!p.recipe||!p.recipe.trim()) return false;
+    if (typeF&&p.type!==typeF) return false;
+    if (query) { const h=[p.name,p.yarnType,p.yarnColor,p.needle,p.recipe].join(' ').toLowerCase(); if(!h.includes(query)) return false; }
     return true;
   });
-  if (!items.length) {
-    list.innerHTML = query
-      ? '<div class="empty"><i class="ti ti-search"></i>Nenhuma receita encontrada.</div>'
-      : '<div class="empty"><i class="ti ti-book"></i>Nenhuma receita salva ainda.</div>';
-    return;
-  }
-  list.innerHTML = items.map(p => {
-    const isExp = expandedSet.has(p.id);
-    const chips = [
-      p.needle     ? escHTML(p.needle) : null,
-      p.yarnType   ? escHTML(p.yarnType) : null,
-      p.yarnColor  ? escHTML(p.yarnColor) : null,
-      p.rowsPerRep > 0 ? `${p.rowsPerRep} carr/rep` : null
-    ].filter(Boolean).map(c => `<span class="pill">${c}</span>`).join('');
-
+  if (!items.length) { list.innerHTML=query?'<div class="empty"><i class="ti ti-search"></i>Nenhuma receita encontrada.</div>':'<div class="empty"><i class="ti ti-book"></i>Nenhuma receita salva ainda.</div>'; return; }
+  list.innerHTML=items.map(p=>{
+    const isExp=expandedSet.has(p.id);
+    const chips=[
+      p.needle?escHTML(p.needle):null, p.yarnType?escHTML(p.yarnType):null, p.yarnColor?escHTML(p.yarnColor):null,
+      p.blocks&&p.blocks.length?`${p.blocks.length} bloco${p.blocks.length>1?'s':''}`:null
+    ].filter(Boolean).map(c=>`<span class="pill">${c}</span>`).join('');
     return `<div class="recipe-card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:12px;">
         <div style="flex:1;min-width:0;">
@@ -790,159 +673,133 @@ function renderRecipes() {
       </div>
     </div>`;
   }).join('');
-
-  requestAnimationFrame(() => {
-    items.forEach(p => {
-      const block   = document.getElementById('rcp-' + p.id);
-      const btnWrap = document.getElementById('rcp-btn-wrap-' + p.id);
-      if (!block || !btnWrap) return;
-      block.classList.remove('collapsed');
-      const fullH = block.scrollHeight;
-      if (!expandedSet.has(p.id)) block.classList.add('collapsed');
-      if (fullH > COLLAPSE_H) {
-        const isExp = expandedSet.has(p.id);
-        btnWrap.innerHTML = `<button class="expand-btn" onclick="toggleRecipe('${p.id}')">${isExp?'Ver menos ↑':'Ver completa ↓'}</button>`;
-      }
+  requestAnimationFrame(()=>{
+    items.forEach(p=>{
+      const block=document.getElementById('rcp-'+p.id); const btnWrap=document.getElementById('rcp-btn-wrap-'+p.id); if(!block||!btnWrap) return;
+      block.classList.remove('collapsed'); const fullH=block.scrollHeight; if(!expandedSet.has(p.id)) block.classList.add('collapsed');
+      if (fullH>COLLAPSE_H) { const isExp=expandedSet.has(p.id); btnWrap.innerHTML=`<button class="expand-btn" onclick="toggleRecipe('${p.id}')">${isExp?'Ver menos ↑':'Ver completa ↓'}</button>`; }
     });
   });
 }
 
 function toggleRecipe(id) {
-  const block   = document.getElementById('rcp-' + id);
-  const btnWrap = document.getElementById('rcp-btn-wrap-' + id);
-  if (!block || !btnWrap) return;
-  if (expandedSet.has(id)) {
-    expandedSet.delete(id);
-    block.classList.add('collapsed');
-    btnWrap.querySelector('button').textContent = 'Ver completa ↓';
-  } else {
-    expandedSet.add(id);
-    block.classList.remove('collapsed');
-    btnWrap.querySelector('button').textContent = 'Ver menos ↑';
-  }
+  const block=document.getElementById('rcp-'+id); const btnWrap=document.getElementById('rcp-btn-wrap-'+id); if(!block||!btnWrap) return;
+  if (expandedSet.has(id)) { expandedSet.delete(id); block.classList.add('collapsed'); btnWrap.querySelector('button').textContent='Ver completa ↓'; }
+  else { expandedSet.add(id); block.classList.remove('collapsed'); btnWrap.querySelector('button').textContent='Ver menos ↑'; }
 }
 
 function useRecipe(id) {
-  const p = getP(id); if (!p) return;
-  document.getElementById('f-name').value         = p.name + ' (cópia)';
-  document.getElementById('f-type').value         = p.type;
-  updateNeedleOptions(p.needle);
-  document.getElementById('f-yarn-type').value    = p.yarnType  || '';
-  document.getElementById('f-yarn-color').value   = p.yarnColor || '';
-  document.getElementById('f-rows-per-rep').value = p.rowsPerRep || '';
-  document.getElementById('f-recipe').value       = p.recipe    || '';
-  document.getElementById('f-status').value       = 'planejado';
-  document.getElementById('f-start').value        = today();
-  document.getElementById('form-title').textContent = 'Novo projeto (baseado em receita)';
-  editingId = null; showTab('novo');
+  const p=getP(id); if (!p) return;
+  document.getElementById('f-name').value=p.name+' (cópia)';
+  document.getElementById('f-type').value=p.type; updateNeedleOptions(p.needle);
+  document.getElementById('f-yarn-type').value=p.yarnType||'';
+  document.getElementById('f-yarn-color').value=p.yarnColor||'';
+  document.getElementById('f-recipe').value=p.recipe||'';
+  document.getElementById('f-status').value='planejado';
+  document.getElementById('f-start').value=today();
+  formBlocks=p.blocks?p.blocks.map(b=>({...b,rowInRep:0,rep:0})):[];
+  document.getElementById('form-title').textContent='Novo projeto (baseado em receita)';
+  editingId=null; showTab('novo');
 }
 
 // ── Render Histórico ──
 function renderHistory() {
-  const done   = projects.filter(p => p.status === 'concluído');
-  const inProg = projects.filter(p => p.status === 'em andamento');
-  document.getElementById('stats-grid').innerHTML = `
+  const done=projects.filter(p=>p.status==='concluído');
+  const inProg=projects.filter(p=>p.status==='em andamento');
+  document.getElementById('stats-grid').innerHTML=`
     <div class="stat-card"><div class="stat-value">${projects.length}</div><div class="stat-label">Total</div></div>
     <div class="stat-card"><div class="stat-value">${done.length}</div><div class="stat-label">Concluídos</div></div>
     <div class="stat-card"><div class="stat-value">${inProg.length}</div><div class="stat-label">Em andamento</div></div>`;
-  const list = document.getElementById('history-list');
-  if (!done.length) {
-    list.innerHTML = '<div class="empty"><i class="ti ti-trophy"></i>Nenhum projeto concluído ainda.</div>';
-    return;
-  }
-  list.innerHTML = done.map(p => {
-    const rpr   = parseInt(p.rowsPerRep) || 0;
-    const total = ((p.rep||0) * rpr) + (p.rowInRep||0);
+  const list=document.getElementById('history-list');
+  if (!done.length) { list.innerHTML='<div class="empty"><i class="ti ti-trophy"></i>Nenhum projeto concluído ainda.</div>'; return; }
+  list.innerHTML=done.map(p=>{
+    const totalReps=(p.blocks||[]).reduce((s,b)=>s+(b.rep||0),0);
     return `<div class="project-card">
       <div class="project-header">
-        <div style="flex:1;min-width:0;">
-          <div class="project-name">${escHTML(p.name)}</div>
-          <div class="project-type">${escHTML(p.type)}</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          ${getBadge(p.status)}
-          ${p.startDate ? `<span class="duration-badge">${getDuration(p.startDate,p.endDate)}</span>` : ''}
-        </div>
+        <div style="flex:1;min-width:0;"><div class="project-name">${escHTML(p.name)}</div><div class="project-type">${escHTML(p.type)}</div></div>
+        <div style="display:flex;gap:6px;align-items:center;">${getBadge(p.status)}${p.startDate?`<span class="duration-badge">${getDuration(p.startDate,p.endDate)}</span>`:''}</div>
       </div>
       <div style="font-size:12px;color:var(--text2);">
-        ${p.startDate ? '📅 Início: '+fmtDate(p.startDate) : ''}
-        ${p.endDate   ? '· Conclusão: '+fmtDate(p.endDate) : ''}
+        ${p.startDate?'📅 Início: '+fmtDate(p.startDate):''} ${p.endDate?'· Conclusão: '+fmtDate(p.endDate):''}
       </div>
-      ${total > 0 ? `<div style="font-size:12px;color:var(--text2);margin-top:4px;">${total} carreiras · ${p.rep||0} repetições</div>` : ''}
+      ${totalReps>0?`<div style="font-size:12px;color:var(--text2);margin-top:4px;">${totalReps} repetições concluídas · ${(p.blocks||[]).length} bloco${(p.blocks||[]).length!==1?'s':''}</div>`:''}
     </div>`;
   }).join('');
 }
 
 // ── CRUD ──
 function saveProject() {
-  const name = document.getElementById('f-name').value.trim();
+  const name=document.getElementById('f-name').value.trim();
   if (!name) { alert('Dê um nome ao projeto.'); return; }
-  const proj = {
-    id:         editingId || Date.now().toString(),
-    name,
-    type:       document.getElementById('f-type').value,
-    status:     document.getElementById('f-status').value,
-    yarnType:   document.getElementById('f-yarn-type').value,
-    yarnColor:  document.getElementById('f-yarn-color').value,
-    needle:     document.getElementById('f-needle').value,
-    rowsPerRep: parseInt(document.getElementById('f-rows-per-rep').value) || 0,
-    startDate:  document.getElementById('f-start').value,
-    recipe:     document.getElementById('f-recipe').value,
-    photo:      '',
-    rowInRep: 0, rep: 0, autoRep: true
+  // Validar blocos
+  for (const b of formBlocks) {
+    if (!b.name.trim()) { alert('Dê um nome a todos os blocos de progresso.'); return; }
+    if (!b.rowsPerRep || b.rowsPerRep<1) { alert(`O bloco "${b.name}" precisa ter carreiras por repetição.`); return; }
+  }
+  const proj={
+    id: editingId||Date.now().toString(),
+    name, type: document.getElementById('f-type').value,
+    status: document.getElementById('f-status').value,
+    yarnType: document.getElementById('f-yarn-type').value,
+    yarnColor: document.getElementById('f-yarn-color').value,
+    needle: document.getElementById('f-needle').value,
+    startDate: document.getElementById('f-start').value,
+    recipe: document.getElementById('f-recipe').value,
+    photo: '',
+    blocks: formBlocks.map(b=>({...b}))
   };
   if (editingId) {
-    const idx = projects.findIndex(p => p.id === editingId);
-    proj.rowInRep = projects[idx].rowInRep || 0;
-    proj.rep      = projects[idx].rep      || 0;
-    proj.autoRep  = projects[idx].autoRep  !== false;
-    proj.endDate  = projects[idx].endDate;
-    projects[idx] = proj;
-    editingId = null;
-  } else {
-    projects.unshift(proj);
-  }
+    const idx=projects.findIndex(p=>p.id===editingId);
+    // Preserve progress of existing blocks by id
+    proj.blocks=proj.blocks.map(nb=>{
+      const old=projects[idx].blocks&&projects[idx].blocks.find(ob=>ob.id===nb.id);
+      return old?{...nb,rowInRep:old.rowInRep||0,rep:old.rep||0,autoRep:old.autoRep!==false}:nb;
+    });
+    proj.endDate=projects[idx].endDate;
+    projects[idx]=proj; editingId=null;
+  } else { projects.unshift(proj); }
   persist(); clearForm(); showTab('projetos');
 }
 
+function defaultBlock() {
+  return { id: Date.now().toString(), name: 'Bloco 1', rowsPerRep: 0, totalReps: 0, rowInRep: 0, rep: 0, autoRep: true };
+}
+
 function clearForm() {
-  ['f-name','f-yarn-type','f-yarn-color','f-recipe']
-    .forEach(id => document.getElementById(id).value = '');
-  document.getElementById('f-rows-per-rep').value = '';
-  document.getElementById('f-type').value   = 'Tricô';
-  document.getElementById('f-status').value = 'planejado';
-  document.getElementById('f-start').value  = today();
-  document.getElementById('form-title').textContent = 'Adicionar projeto';
-  updateNeedleOptions();
-  editingId = null;
+  ['f-name','f-yarn-type','f-yarn-color','f-recipe'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-type').value='Tricô';
+  document.getElementById('f-status').value='planejado';
+  document.getElementById('f-start').value=today();
+  document.getElementById('form-title').textContent='Adicionar projeto';
+  formBlocks=[defaultBlock()]; updateNeedleOptions(); renderFormBlocks(); editingId=null;
 }
 
 function editProject(id) {
-  const p = getP(id); if (!p) return;
-  editingId = id;
-  document.getElementById('f-name').value         = p.name      || '';
-  document.getElementById('f-type').value         = p.type      || 'Tricô';
-  updateNeedleOptions(p.needle);
-  document.getElementById('f-status').value       = p.status    || 'planejado';
-  document.getElementById('f-yarn-type').value    = p.yarnType  || '';
-  document.getElementById('f-yarn-color').value   = p.yarnColor || '';
-  document.getElementById('f-rows-per-rep').value = p.rowsPerRep || '';
-  document.getElementById('f-start').value        = p.startDate || today();
-  document.getElementById('f-recipe').value       = p.recipe    || '';
-  document.getElementById('form-title').textContent = 'Editar projeto';
+  const p=getP(id); if (!p) return;
+  editingId=id;
+  document.getElementById('f-name').value=p.name||'';
+  document.getElementById('f-type').value=p.type||'Tricô'; updateNeedleOptions(p.needle);
+  document.getElementById('f-status').value=p.status||'planejado';
+  document.getElementById('f-yarn-type').value=p.yarnType||'';
+  document.getElementById('f-yarn-color').value=p.yarnColor||'';
+  document.getElementById('f-start').value=p.startDate||today();
+  document.getElementById('f-recipe').value=p.recipe||'';
+  formBlocks=p.blocks?p.blocks.map(b=>({...b})):[];
+  document.getElementById('form-title').textContent='Editar projeto';
   showTab('novo');
 }
 
 function markDone(id) {
-  const p = getP(id); if (!p) return;
-  p.status  = 'concluído';
-  p.endDate = today();
+  const p=getP(id); if (!p) return;
+  p.status='concluído'; p.endDate=today();
   persist(); renderProjects();
 }
 
 // ── Init ──
 updateNeedleOptions();
-document.getElementById('f-start').value = today();
+document.getElementById('f-start').value=today();
+formBlocks=[defaultBlock()];
+renderFormBlocks();
 loadProjects();
 </script>
 </body>
