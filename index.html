@@ -733,32 +733,6 @@ function renderProjects() {
 }
 
 // Event delegation — um único listener no container lida com todos os cliques
-document.getElementById('projects-list').addEventListener('click', function(e) {
-  const btn = e.target.closest('[data-action]');
-  if (!btn) return;
-  const action = btn.dataset.action;
-  const pid    = btn.dataset.pid;
-  const bi     = btn.dataset.bi !== undefined ? parseInt(btn.dataset.bi) : null;
-
-  if (action === 'row-inc')         adjustRow(pid, bi, 1);
-  else if (action === 'row-dec')    adjustRow(pid, bi, -1);
-  else if (action === 'rep-inc')    adjustRep(pid, bi, 1);
-  else if (action === 'rep-dec')    adjustRep(pid, bi, -1);
-  else if (action === 'edit')       editProject(pid);
-  else if (action === 'done')       markDone(pid);
-  else if (action === 'delete')     deleteProject(pid);
-  else if (action === 'delete-confirm') confirmDelete(pid);
-  else if (action === 'delete-cancel')  cancelDelete(pid);
-  else if (action === 'celebrate-done') { dismissCelebration(pid); markDone(pid); }
-  else if (action === 'celebrate-dismiss') dismissCelebration(pid);
-});
-
-document.getElementById('projects-list').addEventListener('change', function(e) {
-  const el = e.target.closest('[data-action="auto-toggle"]');
-  if (!el) return;
-  setAuto(el.dataset.pid, parseInt(el.dataset.bi), el.checked);
-});
-
 // ── Render Receitas ──
 const COLLAPSE_H=88;
 function hlText(text,query) {
@@ -792,10 +766,10 @@ function renderRecipes() {
         </div>
       </div>
       <div class="recipe-meta-pills">${chips}</div>
-      <div class="recipe-block recipe-collapsible ${isExp?'':'collapsed'}" id="rcp-${p.id}">${escHTML(p.recipe)}</div>
-      <div id="rcp-btn-wrap-${p.id}"></div>
+      <div class="recipe-block recipe-collapsible ${isExp?'':'collapsed'}" id="rcp-${escHTML(p.id)}">${escHTML(p.recipe)}</div>
+      <div id="rcp-btn-wrap-${escHTML(p.id)}"></div>
       <div style="margin-top:10px;">
-        <button class="btn-ghost" onclick="useRecipe('${p.id}')"><i class="ti ti-copy"></i> Usar como base para novo projeto</button>
+        <button class="btn-ghost" data-action="use-recipe" data-pid="${escHTML(p.id)}"><i class="ti ti-copy"></i> Usar como base para novo projeto</button>
       </div>
     </div>`;
   }).join('');
@@ -803,7 +777,7 @@ function renderRecipes() {
     items.forEach(p=>{
       const block=document.getElementById('rcp-'+p.id); const btnWrap=document.getElementById('rcp-btn-wrap-'+p.id); if(!block||!btnWrap) return;
       block.classList.remove('collapsed'); const fullH=block.scrollHeight; if(!expandedSet.has(p.id)) block.classList.add('collapsed');
-      if (fullH>COLLAPSE_H) { const isExp=expandedSet.has(p.id); btnWrap.innerHTML=`<button class="expand-btn" onclick="toggleRecipe('${p.id}')">${isExp?'Ver menos ↑':'Ver completa ↓'}</button>`; }
+      if (fullH>COLLAPSE_H) { const isExp=expandedSet.has(p.id); btnWrap.innerHTML=`<button class="expand-btn" data-action="toggle-recipe" data-pid="${p.id}">${isExp?'Ver menos ↑':'Ver completa ↓'}</button>`; }
     });
   });
 }
@@ -950,11 +924,50 @@ function markDone(id) {
 }
 
 // ── Init ──
-updateNeedleOptions();
-document.getElementById('f-start').value=today();
-formBlocks=[defaultBlock()];
-renderFormBlocks();
-loadProjects();
+document.addEventListener('DOMContentLoaded', function() {
+  // Projects list delegation
+  document.getElementById('projects-list').addEventListener('click', function(e) {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    const pid    = btn.dataset.pid;
+    const bi     = btn.dataset.bi !== undefined ? parseInt(btn.dataset.bi) : null;
+    if (action === 'row-inc')              adjustRow(pid, bi, 1);
+    else if (action === 'row-dec')         adjustRow(pid, bi, -1);
+    else if (action === 'rep-inc')         adjustRep(pid, bi, 1);
+    else if (action === 'rep-dec')         adjustRep(pid, bi, -1);
+    else if (action === 'edit')            editProject(pid);
+    else if (action === 'done')            markDone(pid);
+    else if (action === 'delete')          deleteProject(pid);
+    else if (action === 'delete-confirm')  confirmDelete(pid);
+    else if (action === 'delete-cancel')   cancelDelete(pid);
+    else if (action === 'celebrate-done')  { dismissCelebration(pid); markDone(pid); }
+    else if (action === 'celebrate-dismiss') dismissCelebration(pid);
+  });
+
+  document.getElementById('projects-list').addEventListener('change', function(e) {
+    const el = e.target.closest('[data-action="auto-toggle"]');
+    if (!el) return;
+    setAuto(el.dataset.pid, parseInt(el.dataset.bi), el.checked);
+  });
+
+  // Recipes list delegation
+  document.getElementById('recipes-list').addEventListener('click', function(e) {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    const pid    = btn.dataset.pid;
+    if (action === 'use-recipe')    useRecipe(pid);
+    else if (action === 'toggle-recipe') toggleRecipe(pid);
+  });
+
+  // Init form
+  updateNeedleOptions();
+  document.getElementById('f-start').value = today();
+  formBlocks = [defaultBlock()];
+  renderFormBlocks();
+  loadProjects();
+});
 </script>
 </body>
 </html>
