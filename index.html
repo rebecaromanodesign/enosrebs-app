@@ -192,11 +192,52 @@
     .btn-remove-block:hover { color: var(--danger-text); }
     .blocks-add-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
     .blocks-hint { font-size: 11px; color: var(--text3); }
+    /* Login screen */
+    .login-screen { display: none; position: fixed; inset: 0; background: var(--bg3); z-index: 1000; align-items: center; justify-content: center; }
+    .login-screen.visible { display: flex; }
+    .login-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; width: 100%; max-width: 360px; margin: 1rem; }
+    .login-logo { font-size: 28px; margin-bottom: 0.5rem; }
+    .login-title { font-size: 20px; font-weight: 600; color: var(--pink); margin-bottom: 0.25rem; }
+    .login-sub { font-size: 13px; color: var(--text2); margin-bottom: 1.5rem; }
+    .login-fields { display: flex; flex-direction: column; gap: 12px; margin-bottom: 1rem; }
+    .login-error { font-size: 13px; color: var(--danger-text); background: var(--danger-bg); border: 0.5px solid var(--danger-border); border-radius: var(--radius-md); padding: 8px 12px; display: none; margin-bottom: 8px; }
+    .login-error.visible { display: block; }
+    .btn-logout { background: none; border: none; color: var(--text3); font-size: 12px; cursor: pointer; padding: 4px 8px; border-radius: var(--radius-md); font-family: inherit; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-logout:hover { color: var(--text2); background: var(--bg2); }
+    .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
   </style>
 </head>
 <body>
+<!-- Login screen -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">🧶</div>
+    <div class="login-title">É nós, Rebs!</div>
+    <div class="login-sub">Projetos & Receitas — faça login para continuar</div>
+    <div class="login-fields">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+    </div>
+    <div class="login-error" id="login-error"></div>
+    <button class="btn-primary" style="width:100%;justify-content:center;" onclick="doLogin()">
+      <i class="ti ti-login"></i> Entrar
+    </button>
+  </div>
+</div>
+
 <div class="container">
-  <h1 class="app-title">🧶 É nós, Rebs! — Projetos & Receitas</h1>
+  <div class="app-header">
+    <h1 class="app-title" style="margin-bottom:0;">🧶 É nós, Rebs! — Projetos & Receitas</h1>
+    <button class="btn-logout" onclick="doLogout()" title="Sair">
+      <i class="ti ti-logout"></i> Sair
+    </button>
+  </div>
 
   <div class="tabs">
     <button class="tab active" onclick="showTab('projetos')">Projetos</button>
@@ -340,14 +381,77 @@ const expandedSet = new Set();
 // Blocos no formulário (array temporário)
 let formBlocks = [];
 
-const SUPA_URL = 'https://nvtnjlgouuunsobnlhmh.supabase.co/rest/v1';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52dG5qbGdvdXV1bnNvYm5saG1oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNTQ5ODQsImV4cCI6MjA5NzczMDk4NH0.gf0VgRwdxiLsIfW6wYg8vCVbzLXQWN1nQR6mNA9LLLc';
-const HEADERS = {
-  'Content-Type': 'application/json',
-  'apikey': SUPA_KEY,
-  'Authorization': `Bearer ${SUPA_KEY}`,
-  'Prefer': 'return=representation'
-};
+const SUPA_URL  = 'https://nvtnjlgouuunsobnlhmh.supabase.co/rest/v1';
+const SUPA_AUTH = 'https://nvtnjlgouuunsobnlhmh.supabase.co/auth/v1';
+const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52dG5qbGdvdXV1bnNvYm5saG1oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNTQ5ODQsImV4cCI6MjA5NzczMDk4NH0.gf0VgRwdxiLsIfW6wYg8vCVbzLXQWN1nQR6mNA9LLLc';
+
+let currentSession = null; // { access_token, user: { id } }
+
+function authHeaders() {
+  const token = currentSession ? currentSession.access_token : SUPA_KEY;
+  return {
+    'Content-Type': 'application/json',
+    'apikey': SUPA_KEY,
+    'Authorization': `Bearer ${token}`,
+    'Prefer': 'return=representation'
+  };
+}
+
+// ── Auth ──
+async function doLogin() {
+  const email    = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl    = document.getElementById('login-error');
+  errEl.classList.remove('visible');
+
+  if (!email || !password) {
+    errEl.textContent = 'Preencha email e senha.';
+    errEl.classList.add('visible');
+    return;
+  }
+
+  const btn = document.querySelector('#login-screen .btn-primary');
+  btn.textContent = 'Entrando…'; btn.disabled = true;
+
+  try {
+    const res = await fetch(`${SUPA_AUTH}/token?grant_type=password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPA_KEY },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error_description || data.msg || 'Credenciais inválidas');
+    currentSession = { access_token: data.access_token, user: data.user };
+    localStorage.setItem('supa_session', JSON.stringify(currentSession));
+    showApp();
+    await loadProjects();
+  } catch(e) {
+    errEl.textContent = e.message;
+    errEl.classList.add('visible');
+  } finally {
+    btn.innerHTML = '<i class="ti ti-login"></i> Entrar'; btn.disabled = false;
+  }
+}
+
+function doLogout() {
+  currentSession = null;
+  localStorage.removeItem('supa_session');
+  projects = []; projectMap = {};
+  document.getElementById('login-screen').classList.add('visible');
+  document.getElementById('login-password').value = '';
+  renderAll();
+}
+
+function showApp() {
+  document.getElementById('login-screen').classList.remove('visible');
+}
+
+// Enter key on password field triggers login
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('login-screen').classList.contains('visible')) {
+    doLogin();
+  }
+});
 
 // Converte snake_case do banco para camelCase do app
 function fromDB(row) {
@@ -369,7 +473,7 @@ function fromDB(row) {
 
 // Converte camelCase do app para snake_case do banco
 function toDB(p) {
-  return {
+  const obj = {
     name:       p.name,
     type:       p.type,
     status:     p.status,
@@ -381,13 +485,15 @@ function toDB(p) {
     recipe:     p.recipe    || null,
     blocks:     p.blocks    || []
   };
+  if (currentSession?.user?.id) obj.user_id = currentSession.user.id;
+  return obj;
 }
 
 // ── Storage (Supabase) ──
 async function loadProjects(silent = false) {
   if (!silent) showLoading(true);
   try {
-    const res = await fetch(`${SUPA_URL}/projetos?order=created_at.desc`, { headers: HEADERS });
+    const res = await fetch(`${SUPA_URL}/projetos?order=created_at.desc`, { headers: authHeaders() });
     if (!res.ok) throw new Error(await res.text());
     const rows = await res.json();
     projects = rows.map(fromDB);
@@ -404,7 +510,7 @@ async function persist(action, proj) {
   try {
     if (action === 'insert') {
       const res = await fetch(`${SUPA_URL}/projetos`, {
-        method: 'POST', headers: HEADERS,
+        method: 'POST', headers: authHeaders(),
         body: JSON.stringify(toDB(proj))
       });
       if (!res.ok) throw new Error(await res.text());
@@ -412,13 +518,13 @@ async function persist(action, proj) {
       return row.id; // retorna o UUID real
     } else if (action === 'update') {
       const res = await fetch(`${SUPA_URL}/projetos?id=eq.${proj.id}`, {
-        method: 'PATCH', headers: HEADERS,
+        method: 'PATCH', headers: authHeaders(),
         body: JSON.stringify(toDB(proj))
       });
       if (!res.ok) throw new Error(await res.text());
     } else if (action === 'delete') {
       const res = await fetch(`${SUPA_URL}/projetos?id=eq.${proj.id}`, {
-        method: 'DELETE', headers: HEADERS
+        method: 'DELETE', headers: authHeaders()
       });
       if (!res.ok) throw new Error(await res.text());
     }
@@ -936,7 +1042,21 @@ updateNeedleOptions();
 document.getElementById('f-start').value = today();
 formBlocks = [defaultBlock()];
 renderFormBlocks();
-loadProjects();
+
+// Tenta restaurar sessão do localStorage
+const saved = localStorage.getItem('supa_session');
+if (saved) {
+  try {
+    currentSession = JSON.parse(saved);
+    showApp();
+    loadProjects();
+  } catch(e) {
+    currentSession = null;
+    document.getElementById('login-screen').classList.add('visible');
+  }
+} else {
+  document.getElementById('login-screen').classList.add('visible');
+}
 
 // Event delegation — projects
 document.getElementById('projects-list').addEventListener('click', function(e) {
