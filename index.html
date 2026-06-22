@@ -620,12 +620,15 @@ function deleteProject(id) {
   if (box) box.classList.toggle('visible');
 }
 function cancelDelete(id) { const b=document.getElementById('del-confirm-'+id); if(b) b.classList.remove('visible'); pendingDeleteId=null; }
-function confirmDelete(id) {
+async function confirmDelete(id) {
   const p = getP(id);
-  projects=projects.filter(p=>p.id!==id);
-  pendingDeleteId=null;
-  persist('delete', p);
+  if (!p) return;
+  projects = projects.filter(x => x.id !== id);
+  rebuildMap();
+  pendingDeleteId = null;
   renderProjects();
+  await persist('delete', p);
+  await loadProjects(true);
 }
 
 // ── Blocos de progresso — formulário ──
