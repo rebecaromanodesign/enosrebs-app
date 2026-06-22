@@ -408,9 +408,7 @@ async function persist(action, proj) {
       });
       if (!res.ok) throw new Error(await res.text());
       const [row] = await res.json();
-      // update local id to the one assigned by the DB
-      const idx = projects.findIndex(p => p.id === proj.id);
-      if (idx !== -1) projects[idx].id = row.id;
+      return row.id; // retorna o UUID real
     } else if (action === 'update') {
       const res = await fetch(`${SUPA_URL}/projetos?id=eq.${proj.id}`, {
         method: 'PATCH', headers: HEADERS,
@@ -427,6 +425,7 @@ async function persist(action, proj) {
     console.error('Erro ao salvar:', e);
     showError('Erro ao salvar. Tente novamente.');
   }
+  return null;
 }
 
 function showLoading(on) {
@@ -830,7 +829,25 @@ function renderHistory() {
 }
 
 // ── CRUD ──
+// Lê os valores atuais dos inputs de blocos diretamente do DOM
+function readFormBlocksFromDOM() {
+  const container = document.getElementById('f-blocks-container');
+  if (!container) return;
+  const rows = container.querySelectorAll('.block-form-row');
+  rows.forEach((row, i) => {
+    const inputs = row.querySelectorAll('input');
+    if (formBlocks[i]) {
+      formBlocks[i].name       = inputs[0]?.value || formBlocks[i].name;
+      formBlocks[i].rowsPerRep = parseInt(inputs[1]?.value) || 0;
+      formBlocks[i].totalReps  = parseInt(inputs[2]?.value) || 0;
+    }
+  });
+}
+
 async function saveProject() {
+  // Lê valores atuais do DOM antes de salvar
+  readFormBlocksFromDOM();
+
   const name=document.getElementById('f-name').value.trim();
   if (!name) { alert('Dê um nome ao projeto.'); return; }
   for (const b of formBlocks) {
@@ -838,8 +855,9 @@ async function saveProject() {
     if (!b.rowsPerRep || b.rowsPerRep<1) { alert(`O bloco "${b.name}" precisa ter carreiras por repetição.`); return; }
   }
   const isNew = !editingId;
+  const tempId = 'temp_'+Date.now();
   const proj={
-    id: editingId||'temp_'+Date.now(),
+    id: editingId || tempId,
     name, type: document.getElementById('f-type').value,
     status: document.getElementById('f-status').value,
     yarnType: document.getElementById('f-yarn-type').value,
@@ -850,18 +868,24 @@ async function saveProject() {
     photo: '',
     blocks: formBlocks.map(b=>({...b}))
   };
+
   if (!isNew) {
     const idx=projects.findIndex(p=>p.id===editingId);
     proj.blocks=proj.blocks.map(nb=>{
-      const old=projects[idx].blocks&&projects[idx].blocks.find(ob=>ob.id===nb.id);
+      const old=projects[idx]?.blocks?.find(ob=>ob.id===nb.id);
       return old?{...nb,rowInRep:old.rowInRep||0,rep:old.rep||0,autoRep:old.autoRep!==false}:nb;
     });
-    proj.endDate=projects[idx].endDate;
+    proj.endDate=projects[idx]?.endDate;
     projects[idx]=proj; editingId=null;
     await persist('update', proj);
   } else {
     projects.unshift(proj);
-    await persist('insert', proj);
+    // persist retorna o id real do Supabase e atualiza no array
+    const realId = await persist('insert', proj);
+    if (realId) {
+      const idx = projects.findIndex(p=>p.id===tempId);
+      if (idx!==-1) projects[idx].id = realId;
+    }
   }
   clearForm(); showTab('projetos');
 }
