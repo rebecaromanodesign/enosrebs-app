@@ -660,23 +660,23 @@ function renderProjects() {
           <div class="prog-block-name">${escHTML(b.name)||'Bloco '+(bi+1)} ${nameLabel}</div>
           <div class="counter-block">
             <span class="counter-label">Carreira</span>
-            <button class="btn-icon" data-action="row-dec" data-pid="${escHTML(p.id)}" data-bi="${bi}">−</button>
-            <span class="counter-val" id="row-val-${escHTML(p.id)}-${bi}">${row}</span>
-            <button class="btn-icon" data-action="row-inc" data-pid="${escHTML(p.id)}" data-bi="${bi}">+</button>
+            <button class="btn-icon" data-action="row-dec" data-pid="${p.id}" data-bi="${bi}">−</button>
+            <span class="counter-val" id="row-val-${p.id}-${bi}">${row}</span>
+            <button class="btn-icon" data-action="row-inc" data-pid="${p.id}" data-bi="${bi}">+</button>
             ${rpr>0?`<span class="counter-sub">de ${rpr}</span>`:''}
           </div>
           ${rpr>0?`
           <div class="counter-block">
             <span class="counter-label">Repetição</span>
-            <button class="btn-icon" data-action="rep-dec" data-pid="${escHTML(p.id)}" data-bi="${bi}">−</button>
-            <span class="counter-val" id="rep-val-${escHTML(p.id)}-${bi}">${rep}</span>
-            <button class="btn-icon" data-action="rep-inc" data-pid="${escHTML(p.id)}" data-bi="${bi}">+</button>
+            <button class="btn-icon" data-action="rep-dec" data-pid="${p.id}" data-bi="${bi}">−</button>
+            <span class="counter-val" id="rep-val-${p.id}-${bi}">${rep}</span>
+            <button class="btn-icon" data-action="rep-inc" data-pid="${p.id}" data-bi="${bi}">+</button>
             ${b.totalReps>0?`<span class="counter-total">/ ${b.totalReps}</span>`:''}
           </div>
           <div class="auto-toggle">
-            <input type="checkbox" id="auto-${escHTML(p.id)}-${bi}" ${b.autoRep!==false?'checked':''}
-              data-action="auto-toggle" data-pid="${escHTML(p.id)}" data-bi="${bi}">
-            <label class="auto-label" for="auto-${escHTML(p.id)}-${bi}">
+            <input type="checkbox" id="auto-${p.id}-${bi}" ${b.autoRep!==false?'checked':''}
+              data-action="auto-toggle" data-pid="${p.id}" data-bi="${bi}">
+            <label class="auto-label" for="auto-${p.id}-${bi}">
               Avanço automático — a cada ${rpr} carreiras, conta uma repetição
             </label>
           </div>`:''}
@@ -688,15 +688,15 @@ function renderProjects() {
           <span class="progress-title">Progresso</span>
         </div>
         <div class="block-list">${blocksHTML}</div>
-        <div class="celebration ${celebrated?'show':''}" id="celebration-${escHTML(p.id)}">
+        <div class="celebration ${celebrated?'show':''}" id="celebration-${p.id}">
           <div class="celebration-emoji">🎉</div>
           <div class="celebration-text">Todos os blocos concluídos!</div>
           <div class="celebration-sub">Que projeto incrível, Rebs! 🧶</div>
           <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center;">
-            <button class="btn-primary" style="font-size:13px;padding:8px 14px;" data-action="celebrate-done" data-pid="${escHTML(p.id)}">
+            <button class="btn-primary" style="font-size:13px;padding:8px 14px;" data-action="celebrate-done" data-pid="${p.id}">
               <i class="ti ti-check"></i> Concluir projeto
             </button>
-            <button class="btn-ghost" style="font-size:12px;" data-action="celebrate-dismiss" data-pid="${escHTML(p.id)}">Agora não</button>
+            <button class="btn-ghost" style="font-size:12px;" data-action="celebrate-dismiss" data-pid="${p.id}">Agora não</button>
           </div>
         </div>
       </div>`;
@@ -717,15 +717,15 @@ function renderProjects() {
       ${progressHTML}
       ${p.recipe?`<div class="recipe-block">${escHTML(p.recipe)}</div>`:''}
       <div class="actions">
-        <button class="btn-ghost" data-action="edit" data-pid="${escHTML(p.id)}"><i class="ti ti-edit"></i> Editar</button>
-        ${p.status!=='concluído'?`<button class="btn-ghost" data-action="done" data-pid="${escHTML(p.id)}"><i class="ti ti-check"></i> Concluir</button>`:''}
-        <button class="btn-ghost" style="color:#a32d2d;border-color:#e24b4a;" data-action="delete" data-pid="${escHTML(p.id)}"><i class="ti ti-trash"></i> Excluir</button>
+        <button class="btn-ghost" data-action="edit" data-pid="${p.id}"><i class="ti ti-edit"></i> Editar</button>
+        ${p.status!=='concluído'?`<button class="btn-ghost" data-action="done" data-pid="${p.id}"><i class="ti ti-check"></i> Concluir</button>`:''}
+        <button class="btn-ghost" style="color:#a32d2d;border-color:#e24b4a;" data-action="delete" data-pid="${p.id}"><i class="ti ti-trash"></i> Excluir</button>
       </div>
-      <div class="delete-confirm ${pendingDeleteId===p.id?'visible':''}" id="del-confirm-${escHTML(p.id)}">
+      <div class="delete-confirm ${pendingDeleteId===p.id?'visible':''}" id="del-confirm-${p.id}">
         <p>Tem certeza? Esta ação não pode ser desfeita.</p>
         <div class="delete-confirm-btns">
-          <button class="btn-danger-sm" data-action="delete-confirm" data-pid="${escHTML(p.id)}"><i class="ti ti-trash"></i> Sim, excluir</button>
-          <button class="btn-ghost" data-action="delete-cancel" data-pid="${escHTML(p.id)}">Cancelar</button>
+          <button class="btn-danger-sm" data-action="delete-confirm" data-pid="${p.id}"><i class="ti ti-trash"></i> Sim, excluir</button>
+          <button class="btn-ghost" data-action="delete-cancel" data-pid="${p.id}">Cancelar</button>
         </div>
       </div>
     </div>`;
@@ -766,10 +766,10 @@ function renderRecipes() {
         </div>
       </div>
       <div class="recipe-meta-pills">${chips}</div>
-      <div class="recipe-block recipe-collapsible ${isExp?'':'collapsed'}" id="rcp-${escHTML(p.id)}">${escHTML(p.recipe)}</div>
-      <div id="rcp-btn-wrap-${escHTML(p.id)}"></div>
+      <div class="recipe-block recipe-collapsible ${isExp?'':'collapsed'}" id="rcp-${p.id}">${escHTML(p.recipe)}</div>
+      <div id="rcp-btn-wrap-${p.id}"></div>
       <div style="margin-top:10px;">
-        <button class="btn-ghost" data-action="use-recipe" data-pid="${escHTML(p.id)}"><i class="ti ti-copy"></i> Usar como base para novo projeto</button>
+        <button class="btn-ghost" data-action="use-recipe" data-pid="${p.id}"><i class="ti ti-copy"></i> Usar como base para novo projeto</button>
       </div>
     </div>`;
   }).join('');
