@@ -928,50 +928,49 @@ function markDone(id) {
 }
 
 // ── Init ──
-document.addEventListener('DOMContentLoaded', function() {
-  // Projects list delegation
-  document.getElementById('projects-list').addEventListener('click', function(e) {
-    const btn = e.target.closest('[data-action]');
-    if (!btn) return;
-    const action = btn.dataset.action;
-    const pid    = btn.dataset.pid;
-    const bi     = btn.dataset.bi !== undefined ? parseInt(btn.dataset.bi) : null;
-    console.log('[click]', action, pid, bi, 'found:', !!getP(pid));
-    if (action === 'row-inc')              adjustRow(pid, bi, 1);
-    else if (action === 'row-dec')         adjustRow(pid, bi, -1);
-    else if (action === 'rep-inc')         adjustRep(pid, bi, 1);
-    else if (action === 'rep-dec')         adjustRep(pid, bi, -1);
-    else if (action === 'edit')            editProject(pid);
-    else if (action === 'done')            markDone(pid);
-    else if (action === 'delete')          deleteProject(pid);
-    else if (action === 'delete-confirm')  confirmDelete(pid);
-    else if (action === 'delete-cancel')   cancelDelete(pid);
-    else if (action === 'celebrate-done')  { dismissCelebration(pid); markDone(pid); }
-    else if (action === 'celebrate-dismiss') dismissCelebration(pid);
-  });
+// ── Init ──
+updateNeedleOptions();
+document.getElementById('f-start').value = today();
+formBlocks = [defaultBlock()];
+renderFormBlocks();
+loadProjects();
 
-  document.getElementById('projects-list').addEventListener('change', function(e) {
-    const el = e.target.closest('[data-action="auto-toggle"]');
-    if (!el) return;
-    setAuto(el.dataset.pid, parseInt(el.dataset.bi), el.checked);
-  });
+// Event delegation — projects
+document.getElementById('projects-list').addEventListener('click', function(e) {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const pid    = btn.dataset.pid;
+  const bi     = btn.dataset.bi !== undefined ? parseInt(btn.dataset.bi) : null;
+  console.log('[click]', action, pid, 'found:', !!getP(pid));
+  if (action === 'row-inc')                adjustRow(pid, bi, 1);
+  else if (action === 'row-dec')           adjustRow(pid, bi, -1);
+  else if (action === 'rep-inc')           adjustRep(pid, bi, 1);
+  else if (action === 'rep-dec')           adjustRep(pid, bi, -1);
+  else if (action === 'edit')              editProject(pid);
+  else if (action === 'done')              markDone(pid);
+  else if (action === 'delete')            deleteProject(pid);
+  else if (action === 'delete-confirm')    confirmDelete(pid);
+  else if (action === 'delete-cancel')     cancelDelete(pid);
+  else if (action === 'celebrate-done')    { dismissCelebration(pid); markDone(pid); }
+  else if (action === 'celebrate-dismiss') dismissCelebration(pid);
+});
 
-  // Recipes list delegation
-  document.getElementById('recipes-list').addEventListener('click', function(e) {
-    const btn = e.target.closest('[data-action]');
-    if (!btn) return;
-    const action = btn.dataset.action;
-    const pid    = btn.dataset.pid;
-    if (action === 'use-recipe')    useRecipe(pid);
-    else if (action === 'toggle-recipe') toggleRecipe(pid);
-  });
+document.getElementById('projects-list').addEventListener('change', function(e) {
+  const el = e.target.closest('[data-action="auto-toggle"]');
+  if (!el) return;
+  setAuto(el.dataset.pid, parseInt(el.dataset.bi), el.checked);
+});
 
-  // Init form
-  updateNeedleOptions();
-  document.getElementById('f-start').value = today();
-  formBlocks = [defaultBlock()];
-  renderFormBlocks();
-  loadProjects();
+// Event delegation — recipes
+document.getElementById('recipes-list').addEventListener('click', function(e) {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const pid    = btn.dataset.pid;
+  console.log('[recipe click]', action, pid);
+  if (action === 'use-recipe')         useRecipe(pid);
+  else if (action === 'toggle-recipe') toggleRecipe(pid);
 });
 </script>
 </body>
