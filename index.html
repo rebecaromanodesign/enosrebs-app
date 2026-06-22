@@ -384,8 +384,8 @@ function toDB(p) {
 }
 
 // ── Storage (Supabase) ──
-async function loadProjects() {
-  showLoading(true);
+async function loadProjects(silent = false) {
+  if (!silent) showLoading(true);
   try {
     const res = await fetch(`${SUPA_URL}/projetos?order=created_at.desc`, { headers: HEADERS });
     if (!res.ok) throw new Error(await res.text());
@@ -394,9 +394,9 @@ async function loadProjects() {
     rebuildMap();
   } catch(e) {
     console.error('Erro ao carregar projetos:', e);
-    showError('Não foi possível carregar os projetos. Verifique a conexão.');
+    if (!silent) showError('Não foi possível carregar os projetos. Verifique a conexão.');
   }
-  showLoading(false);
+  if (!silent) showLoading(false);
   renderAll();
 }
 
@@ -881,6 +881,7 @@ async function saveProject() {
     projects[idx]=proj; editingId=null;
     rebuildMap();
     await persist('update', proj);
+    await loadProjects(true); // recarrega silenciosamente
   } else {
     projects.unshift(proj);
     const realId = await persist('insert', proj);
