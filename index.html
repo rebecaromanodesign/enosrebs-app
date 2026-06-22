@@ -637,17 +637,15 @@ function renderProjects() {
     let progressHTML = '';
     if (p.status==='em andamento' && p.blocks && p.blocks.length) {
       const celebrated=allBlocksDone(p);
-      // find current active block index (first not done)
       let activeIdx = p.blocks.findIndex(b=> b.totalReps<=0 || b.rep<b.totalReps);
-      if (activeIdx===-1) activeIdx=p.blocks.length-1; // all done
+      if (activeIdx===-1) activeIdx=p.blocks.length-1;
 
       const blocksHTML = p.blocks.map((b,bi)=>{
-        const isActive = bi===activeIdx;
         const isDone = b.totalReps>0 && b.rep>=b.totalReps;
         const isLocked = bi>activeIdx;
         const rpr=parseInt(b.rowsPerRep)||0;
         const row=b.rowInRep||0; const rep=b.rep||0;
-        const blockClass = isDone?'prog-block done-block': isActive?'prog-block active-block':'prog-block';
+        const blockClass = isDone?'prog-block done-block': bi===activeIdx?'prog-block active-block':'prog-block';
         const nameLabel = isDone
           ? `<span class="block-done-label">✓ concluído</span>`
           : isLocked ? `<span class="block-locked-label">aguardando bloco anterior</span>` : '';
@@ -662,23 +660,23 @@ function renderProjects() {
           <div class="prog-block-name">${escHTML(b.name)||'Bloco '+(bi+1)} ${nameLabel}</div>
           <div class="counter-block">
             <span class="counter-label">Carreira</span>
-            <button class="btn-icon" onclick="adjustRow('${p.id}',${bi},-1)">−</button>
-            <span class="counter-val" id="row-val-${p.id}-${bi}">${row}</span>
-            <button class="btn-icon" onclick="adjustRow('${p.id}',${bi},1)">+</button>
+            <button class="btn-icon" data-action="row-dec" data-pid="${escHTML(p.id)}" data-bi="${bi}">−</button>
+            <span class="counter-val" id="row-val-${escHTML(p.id)}-${bi}">${row}</span>
+            <button class="btn-icon" data-action="row-inc" data-pid="${escHTML(p.id)}" data-bi="${bi}">+</button>
             ${rpr>0?`<span class="counter-sub">de ${rpr}</span>`:''}
           </div>
           ${rpr>0?`
           <div class="counter-block">
             <span class="counter-label">Repetição</span>
-            <button class="btn-icon" onclick="adjustRep('${p.id}',${bi},-1)">−</button>
-            <span class="counter-val" id="rep-val-${p.id}-${bi}">${rep}</span>
-            <button class="btn-icon" onclick="adjustRep('${p.id}',${bi},1)">+</button>
+            <button class="btn-icon" data-action="rep-dec" data-pid="${escHTML(p.id)}" data-bi="${bi}">−</button>
+            <span class="counter-val" id="rep-val-${escHTML(p.id)}-${bi}">${rep}</span>
+            <button class="btn-icon" data-action="rep-inc" data-pid="${escHTML(p.id)}" data-bi="${bi}">+</button>
             ${b.totalReps>0?`<span class="counter-total">/ ${b.totalReps}</span>`:''}
           </div>
           <div class="auto-toggle">
-            <input type="checkbox" id="auto-${p.id}-${bi}" ${b.autoRep!==false?'checked':''}
-              onchange="setAuto('${p.id}',${bi},this.checked)">
-            <label class="auto-label" for="auto-${p.id}-${bi}">
+            <input type="checkbox" id="auto-${escHTML(p.id)}-${bi}" ${b.autoRep!==false?'checked':''}
+              data-action="auto-toggle" data-pid="${escHTML(p.id)}" data-bi="${bi}">
+            <label class="auto-label" for="auto-${escHTML(p.id)}-${bi}">
               Avanço automático — a cada ${rpr} carreiras, conta uma repetição
             </label>
           </div>`:''}
@@ -690,15 +688,15 @@ function renderProjects() {
           <span class="progress-title">Progresso</span>
         </div>
         <div class="block-list">${blocksHTML}</div>
-        <div class="celebration ${celebrated?'show':''}" id="celebration-${p.id}">
+        <div class="celebration ${celebrated?'show':''}" id="celebration-${escHTML(p.id)}">
           <div class="celebration-emoji">🎉</div>
           <div class="celebration-text">Todos os blocos concluídos!</div>
           <div class="celebration-sub">Que projeto incrível, Rebs! 🧶</div>
           <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center;">
-            <button class="btn-primary" style="font-size:13px;padding:8px 14px;" onclick="dismissCelebration('${p.id}');markDone('${p.id}')">
+            <button class="btn-primary" style="font-size:13px;padding:8px 14px;" data-action="celebrate-done" data-pid="${escHTML(p.id)}">
               <i class="ti ti-check"></i> Concluir projeto
             </button>
-            <button class="btn-ghost" style="font-size:12px;" onclick="dismissCelebration('${p.id}')">Agora não</button>
+            <button class="btn-ghost" style="font-size:12px;" data-action="celebrate-dismiss" data-pid="${escHTML(p.id)}">Agora não</button>
           </div>
         </div>
       </div>`;
@@ -719,20 +717,47 @@ function renderProjects() {
       ${progressHTML}
       ${p.recipe?`<div class="recipe-block">${escHTML(p.recipe)}</div>`:''}
       <div class="actions">
-        <button class="btn-ghost" onclick="editProject('${p.id}')"><i class="ti ti-edit"></i> Editar</button>
-        ${p.status!=='concluído'?`<button class="btn-ghost" onclick="markDone('${p.id}')"><i class="ti ti-check"></i> Concluir</button>`:''}
-        <button class="btn-ghost" style="color:#a32d2d;border-color:#e24b4a;" onclick="deleteProject('${p.id}')"><i class="ti ti-trash"></i> Excluir</button>
+        <button class="btn-ghost" data-action="edit" data-pid="${escHTML(p.id)}"><i class="ti ti-edit"></i> Editar</button>
+        ${p.status!=='concluído'?`<button class="btn-ghost" data-action="done" data-pid="${escHTML(p.id)}"><i class="ti ti-check"></i> Concluir</button>`:''}
+        <button class="btn-ghost" style="color:#a32d2d;border-color:#e24b4a;" data-action="delete" data-pid="${escHTML(p.id)}"><i class="ti ti-trash"></i> Excluir</button>
       </div>
-      <div class="delete-confirm ${pendingDeleteId===p.id?'visible':''}" id="del-confirm-${p.id}">
+      <div class="delete-confirm ${pendingDeleteId===p.id?'visible':''}" id="del-confirm-${escHTML(p.id)}">
         <p>Tem certeza? Esta ação não pode ser desfeita.</p>
         <div class="delete-confirm-btns">
-          <button class="btn-danger-sm" onclick="confirmDelete('${p.id}')"><i class="ti ti-trash"></i> Sim, excluir</button>
-          <button class="btn-ghost" onclick="cancelDelete('${p.id}')">Cancelar</button>
+          <button class="btn-danger-sm" data-action="delete-confirm" data-pid="${escHTML(p.id)}"><i class="ti ti-trash"></i> Sim, excluir</button>
+          <button class="btn-ghost" data-action="delete-cancel" data-pid="${escHTML(p.id)}">Cancelar</button>
         </div>
       </div>
     </div>`;
   }).join('');
 }
+
+// Event delegation — um único listener no container lida com todos os cliques
+document.getElementById('projects-list').addEventListener('click', function(e) {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const pid    = btn.dataset.pid;
+  const bi     = btn.dataset.bi !== undefined ? parseInt(btn.dataset.bi) : null;
+
+  if (action === 'row-inc')         adjustRow(pid, bi, 1);
+  else if (action === 'row-dec')    adjustRow(pid, bi, -1);
+  else if (action === 'rep-inc')    adjustRep(pid, bi, 1);
+  else if (action === 'rep-dec')    adjustRep(pid, bi, -1);
+  else if (action === 'edit')       editProject(pid);
+  else if (action === 'done')       markDone(pid);
+  else if (action === 'delete')     deleteProject(pid);
+  else if (action === 'delete-confirm') confirmDelete(pid);
+  else if (action === 'delete-cancel')  cancelDelete(pid);
+  else if (action === 'celebrate-done') { dismissCelebration(pid); markDone(pid); }
+  else if (action === 'celebrate-dismiss') dismissCelebration(pid);
+});
+
+document.getElementById('projects-list').addEventListener('change', function(e) {
+  const el = e.target.closest('[data-action="auto-toggle"]');
+  if (!el) return;
+  setAuto(el.dataset.pid, parseInt(el.dataset.bi), el.checked);
+});
 
 // ── Render Receitas ──
 const COLLAPSE_H=88;
