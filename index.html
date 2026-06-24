@@ -411,7 +411,7 @@ async function doLogin() {
   }
 
   const btn = document.querySelector('#login-screen .btn-primary');
-  btn.textContent = 'Entrando…'; btn.disabled = true;
+  btn.innerHTML = 'Entrando…'; btn.disabled = true;
 
   try {
     const res = await fetch(`${SUPA_AUTH}/token?grant_type=password`, {
@@ -421,8 +421,7 @@ async function doLogin() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error_description || data.msg || 'Credenciais inválidas');
-    currentSession = { access_token: data.access_token, user: data.user };
-    localStorage.setItem('supa_session', JSON.stringify(currentSession));
+    saveSession(data);
     showApp();
     await loadProjects();
   } catch(e) {
@@ -433,13 +432,62 @@ async function doLogin() {
   }
 }
 
-function doLogout() {
+function saveSession(data) {
+  currentSession = {
+    access_token:  data.access_token,
+    refresh_token: data.refresh_token,
+    user:          data.user
+  };
+  localStorage.setItem('supa_session', JSON.stringify(currentSession));
+}
+
+async function refreshSession() {
+  if (!currentSession?.refresh_token) return false;
+  try {
+    const res = await fetch(`${SUPA_AUTH}/token?grant_type=refresh_token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPA_KEY },
+      body: JSON.stringify({ refresh_token: currentSession.refresh_token })
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    saveSession(data);
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+async function fetchWithAuth(url, options = {}) {
+  options.headers = authHeaders();
+  let res = await fetch(url, options);
+  // Token expirado — tenta renovar uma vez
+  if (res.status === 401) {
+    const refreshed = await refreshSession();
+    if (refreshed) {
+      options.headers = authHeaders();
+      res = await fetch(url, options);
+    }
+    if (res.status === 401) {
+      // Refresh também falhou — volta para login
+      forceLogout();
+      return null;
+    }
+  }
+  return res;
+}
+
+function forceLogout() {
   currentSession = null;
   localStorage.removeItem('supa_session');
   projects = []; projectMap = {};
-  document.getElementById('login-screen').classList.add('visible');
-  document.getElementById('login-password').value = '';
   renderAll();
+  document.getElementById('login-screen').classList.add('visible');
+}
+
+function doLogout() {
+  forceLogout();
+  document.getElementById('login-password').value = '';
 }
 
 function showApp() {
@@ -493,7 +541,8 @@ function toDB(p) {
 async function loadProjects(silent = false) {
   if (!silent) showLoading(true);
   try {
-    const res = await fetch(`${SUPA_URL}/projetos?order=created_at.desc`, { headers: authHeaders() });
+    const res = await fetchWithAuth(`${SUPA_URL}/projetos?order=created_at.desc`);
+    if (!res) return; // redirecionado para login
     if (!res.ok) throw new Error(await res.text());
     const rows = await res.json();
     projects = rows.map(fromDB);
@@ -509,24 +558,24 @@ async function loadProjects(silent = false) {
 async function persist(action, proj) {
   try {
     if (action === 'insert') {
-      const res = await fetch(`${SUPA_URL}/projetos`, {
-        method: 'POST', headers: authHeaders(),
+      const res = await fetchWithAuth(`${SUPA_URL}/projetos`, {
+        method: 'POST',
         body: JSON.stringify(toDB(proj))
       });
-      if (!res.ok) throw new Error(await res.text());
+      if (!res || !res.ok) throw new Error(res ? await res.text() : 'auth error');
       const [row] = await res.json();
-      return row.id; // retorna o UUID real
+      return row.id;
     } else if (action === 'update') {
-      const res = await fetch(`${SUPA_URL}/projetos?id=eq.${proj.id}`, {
-        method: 'PATCH', headers: authHeaders(),
+      const res = await fetchWithAuth(`${SUPA_URL}/projetos?id=eq.${proj.id}`, {
+        method: 'PATCH',
         body: JSON.stringify(toDB(proj))
       });
-      if (!res.ok) throw new Error(await res.text());
+      if (!res || !res.ok) throw new Error(res ? await res.text() : 'auth error');
     } else if (action === 'delete') {
-      const res = await fetch(`${SUPA_URL}/projetos?id=eq.${proj.id}`, {
-        method: 'DELETE', headers: authHeaders()
+      const res = await fetchWithAuth(`${SUPA_URL}/projetos?id=eq.${proj.id}`, {
+        method: 'DELETE'
       });
-      if (!res.ok) throw new Error(await res.text());
+      if (!res || !res.ok) throw new Error(res ? await res.text() : 'auth error');
     }
   } catch(e) {
     console.error('Erro ao salvar:', e);
